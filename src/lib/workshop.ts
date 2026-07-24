@@ -35,8 +35,17 @@ export type Invoice = {
   client_name: string;
   client_address: string | null;
   client_tax_id: string | null;
+  client_phone: string | null;
+  client_email: string | null;
+  obs: string | null;
   motorcycle_info: string | null;
+  moto_brand: string | null;
+  moto_model: string | null;
+  moto_plate: string | null;
+  moto_kms: number | null;
+  moto_vin: string | null;
   vat_rate: number;
+  retention: boolean;
   notes: string | null;
   created_at: string;
 };
@@ -48,6 +57,7 @@ export type InvoiceItem = {
   description: string;
   quantity: number;
   unit_price: number;
+  discount: number;
   position: number;
 };
 
