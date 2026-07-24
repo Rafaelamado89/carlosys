@@ -14,7 +14,201 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      invoice_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string
+          item_type: Database["public"]["Enums"]["invoice_item_type"]
+          position: number
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          invoice_id: string
+          item_type: Database["public"]["Enums"]["invoice_item_type"]
+          position?: number
+          quantity?: number
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string
+          item_type?: Database["public"]["Enums"]["invoice_item_type"]
+          position?: number
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          client_address: string | null
+          client_name: string
+          client_tax_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          invoice_number: string
+          motorcycle_info: string | null
+          notes: string | null
+          updated_at: string
+          vat_rate: number
+          work_order_id: string | null
+        }
+        Insert: {
+          client_address?: string | null
+          client_name: string
+          client_tax_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          invoice_number?: string
+          motorcycle_info?: string | null
+          notes?: string | null
+          updated_at?: string
+          vat_rate?: number
+          work_order_id?: string | null
+        }
+        Update: {
+          client_address?: string | null
+          client_name?: string
+          client_tax_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          invoice_number?: string
+          motorcycle_info?: string | null
+          notes?: string | null
+          updated_at?: string
+          vat_rate?: number
+          work_order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parts_requests: {
+        Row: {
+          cost_price: number
+          created_at: string
+          created_by: string | null
+          external_url: string | null
+          id: string
+          motorcycle_model: string | null
+          notes: string | null
+          part_code: string | null
+          part_name: string
+          quantity: number
+          selling_price: number
+          status: Database["public"]["Enums"]["part_order_status"]
+          updated_at: string
+          work_order_id: string | null
+        }
+        Insert: {
+          cost_price?: number
+          created_at?: string
+          created_by?: string | null
+          external_url?: string | null
+          id?: string
+          motorcycle_model?: string | null
+          notes?: string | null
+          part_code?: string | null
+          part_name: string
+          quantity?: number
+          selling_price?: number
+          status?: Database["public"]["Enums"]["part_order_status"]
+          updated_at?: string
+          work_order_id?: string | null
+        }
+        Update: {
+          cost_price?: number
+          created_at?: string
+          created_by?: string | null
+          external_url?: string | null
+          id?: string
+          motorcycle_model?: string | null
+          notes?: string | null
+          part_code?: string | null
+          part_name?: string
+          quantity?: number
+          selling_price?: number
+          status?: Database["public"]["Enums"]["part_order_status"]
+          updated_at?: string
+          work_order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parts_requests_work_order_id_fkey"
+            columns: ["work_order_id"]
+            isOneToOne: false
+            referencedRelation: "work_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_orders: {
+        Row: {
+          client_name: string
+          client_phone: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          license_plate: string | null
+          motorcycle_make: string
+          motorcycle_model: string
+          notes: string | null
+          status: Database["public"]["Enums"]["work_order_status"]
+          updated_at: string
+        }
+        Insert: {
+          client_name: string
+          client_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          license_plate?: string | null
+          motorcycle_make: string
+          motorcycle_model: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["work_order_status"]
+          updated_at?: string
+        }
+        Update: {
+          client_name?: string
+          client_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          license_plate?: string | null
+          motorcycle_make?: string
+          motorcycle_model?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["work_order_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +217,19 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      invoice_item_type: "labor" | "part"
+      part_order_status:
+        | "pending"
+        | "ordered"
+        | "shipped"
+        | "received"
+        | "cancelled"
+      work_order_status:
+        | "open"
+        | "in_progress"
+        | "waiting_parts"
+        | "completed"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +356,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      invoice_item_type: ["labor", "part"],
+      part_order_status: [
+        "pending",
+        "ordered",
+        "shipped",
+        "received",
+        "cancelled",
+      ],
+      work_order_status: [
+        "open",
+        "in_progress",
+        "waiting_parts",
+        "completed",
+        "cancelled",
+      ],
+    },
   },
 } as const
