@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          discount: number
           id: string
           invoice_id: string
           item_type: Database["public"]["Enums"]["invoice_item_type"]
@@ -28,6 +29,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
+          discount?: number
           id?: string
           invoice_id: string
           item_type: Database["public"]["Enums"]["invoice_item_type"]
@@ -38,6 +40,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          discount?: number
           id?: string
           invoice_id?: string
           item_type?: Database["public"]["Enums"]["invoice_item_type"]
@@ -58,42 +61,69 @@ export type Database = {
       invoices: {
         Row: {
           client_address: string | null
+          client_email: string | null
           client_name: string
+          client_phone: string | null
           client_tax_id: string | null
           created_at: string
           created_by: string | null
           id: string
           invoice_number: string
+          moto_brand: string | null
+          moto_kms: number | null
+          moto_model: string | null
+          moto_plate: string | null
+          moto_vin: string | null
           motorcycle_info: string | null
           notes: string | null
+          obs: string | null
+          retention: boolean
           updated_at: string
           vat_rate: number
           work_order_id: string | null
         }
         Insert: {
           client_address?: string | null
+          client_email?: string | null
           client_name: string
+          client_phone?: string | null
           client_tax_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
           invoice_number?: string
+          moto_brand?: string | null
+          moto_kms?: number | null
+          moto_model?: string | null
+          moto_plate?: string | null
+          moto_vin?: string | null
           motorcycle_info?: string | null
           notes?: string | null
+          obs?: string | null
+          retention?: boolean
           updated_at?: string
           vat_rate?: number
           work_order_id?: string | null
         }
         Update: {
           client_address?: string | null
+          client_email?: string | null
           client_name?: string
+          client_phone?: string | null
           client_tax_id?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
           invoice_number?: string
+          moto_brand?: string | null
+          moto_kms?: number | null
+          moto_model?: string | null
+          moto_plate?: string | null
+          moto_vin?: string | null
           motorcycle_info?: string | null
           notes?: string | null
+          obs?: string | null
+          retention?: boolean
           updated_at?: string
           vat_rate?: number
           work_order_id?: string | null
