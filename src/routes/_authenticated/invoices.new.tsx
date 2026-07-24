@@ -106,7 +106,7 @@ function NewInvoice() {
         const itemsToInsert = partsList.map((p, idx) => ({
           invoice_id: data.id,
           item_type: "part",
-          description: p.part_code ? `${p.part_name} (${p.part_code})` : p.part_name,
+          description: p.part_name,
           quantity: p.quantity || 1,
           unit_price: Number(p.selling_price) || 0,
           discount: 0,
