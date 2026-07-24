@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Internal management system for a motorcycle mechanic workshop." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Workshop ERP" },
+      { name: "twitter:description", content: "Internal management system for a motorcycle mechanic workshop." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/532f2eab-fcca-48f6-b651-9c4bc8411460/id-preview-50556cba--7e19e864-4b17-423e-b294-a2318170d003.lovable.app-1784908269478.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/532f2eab-fcca-48f6-b651-9c4bc8411460/id-preview-50556cba--7e19e864-4b17-423e-b294-a2318170d003.lovable.app-1784908269478.png" },
     ],
     links: [
       {
