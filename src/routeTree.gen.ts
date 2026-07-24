@@ -9,38 +9,202 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedWorkOrdersIndexRouteImport } from './routes/_authenticated/work-orders.index'
+import { Route as AuthenticatedPartsIndexRouteImport } from './routes/_authenticated/parts.index'
+import { Route as AuthenticatedInvoicesIndexRouteImport } from './routes/_authenticated/invoices.index'
+import { Route as AuthenticatedWorkOrdersNewRouteImport } from './routes/_authenticated/work-orders.new'
+import { Route as AuthenticatedWorkOrdersIdRouteImport } from './routes/_authenticated/work-orders.$id'
+import { Route as AuthenticatedPartsNewRouteImport } from './routes/_authenticated/parts.new'
+import { Route as AuthenticatedPartsIdRouteImport } from './routes/_authenticated/parts.$id'
+import { Route as AuthenticatedInvoicesNewRouteImport } from './routes/_authenticated/invoices.new'
+import { Route as AuthenticatedInvoicesIdRouteImport } from './routes/_authenticated/invoices.$id'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedWorkOrdersIndexRoute =
+  AuthenticatedWorkOrdersIndexRouteImport.update({
+    id: '/work-orders/',
+    path: '/work-orders/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPartsIndexRoute = AuthenticatedPartsIndexRouteImport.update({
+  id: '/parts/',
+  path: '/parts/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInvoicesIndexRoute =
+  AuthenticatedInvoicesIndexRouteImport.update({
+    id: '/invoices/',
+    path: '/invoices/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWorkOrdersNewRoute =
+  AuthenticatedWorkOrdersNewRouteImport.update({
+    id: '/work-orders/new',
+    path: '/work-orders/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWorkOrdersIdRoute =
+  AuthenticatedWorkOrdersIdRouteImport.update({
+    id: '/work-orders/$id',
+    path: '/work-orders/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPartsNewRoute = AuthenticatedPartsNewRouteImport.update({
+  id: '/parts/new',
+  path: '/parts/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPartsIdRoute = AuthenticatedPartsIdRouteImport.update({
+  id: '/parts/$id',
+  path: '/parts/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedInvoicesNewRoute =
+  AuthenticatedInvoicesNewRouteImport.update({
+    id: '/invoices/new',
+    path: '/invoices/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedInvoicesIdRoute = AuthenticatedInvoicesIdRouteImport.update({
+  id: '/invoices/$id',
+  path: '/invoices/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/parts/$id': typeof AuthenticatedPartsIdRoute
+  '/parts/new': typeof AuthenticatedPartsNewRoute
+  '/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
+  '/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
+  '/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/parts/': typeof AuthenticatedPartsIndexRoute
+  '/work-orders/': typeof AuthenticatedWorkOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/parts/$id': typeof AuthenticatedPartsIdRoute
+  '/parts/new': typeof AuthenticatedPartsNewRoute
+  '/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
+  '/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
+  '/invoices': typeof AuthenticatedInvoicesIndexRoute
+  '/parts': typeof AuthenticatedPartsIndexRoute
+  '/work-orders': typeof AuthenticatedWorkOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/invoices/$id': typeof AuthenticatedInvoicesIdRoute
+  '/_authenticated/invoices/new': typeof AuthenticatedInvoicesNewRoute
+  '/_authenticated/parts/$id': typeof AuthenticatedPartsIdRoute
+  '/_authenticated/parts/new': typeof AuthenticatedPartsNewRoute
+  '/_authenticated/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
+  '/_authenticated/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
+  '/_authenticated/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/_authenticated/parts/': typeof AuthenticatedPartsIndexRoute
+  '/_authenticated/work-orders/': typeof AuthenticatedWorkOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/invoices/$id'
+    | '/invoices/new'
+    | '/parts/$id'
+    | '/parts/new'
+    | '/work-orders/$id'
+    | '/work-orders/new'
+    | '/invoices/'
+    | '/parts/'
+    | '/work-orders/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/invoices/$id'
+    | '/invoices/new'
+    | '/parts/$id'
+    | '/parts/new'
+    | '/work-orders/$id'
+    | '/work-orders/new'
+    | '/invoices'
+    | '/parts'
+    | '/work-orders'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/invoices/$id'
+    | '/_authenticated/invoices/new'
+    | '/_authenticated/parts/$id'
+    | '/_authenticated/parts/new'
+    | '/_authenticated/work-orders/$id'
+    | '/_authenticated/work-orders/new'
+    | '/_authenticated/invoices/'
+    | '/_authenticated/parts/'
+    | '/_authenticated/work-orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +212,113 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/work-orders/': {
+      id: '/_authenticated/work-orders/'
+      path: '/work-orders'
+      fullPath: '/work-orders/'
+      preLoaderRoute: typeof AuthenticatedWorkOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/parts/': {
+      id: '/_authenticated/parts/'
+      path: '/parts'
+      fullPath: '/parts/'
+      preLoaderRoute: typeof AuthenticatedPartsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/invoices/': {
+      id: '/_authenticated/invoices/'
+      path: '/invoices'
+      fullPath: '/invoices/'
+      preLoaderRoute: typeof AuthenticatedInvoicesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/work-orders/new': {
+      id: '/_authenticated/work-orders/new'
+      path: '/work-orders/new'
+      fullPath: '/work-orders/new'
+      preLoaderRoute: typeof AuthenticatedWorkOrdersNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/work-orders/$id': {
+      id: '/_authenticated/work-orders/$id'
+      path: '/work-orders/$id'
+      fullPath: '/work-orders/$id'
+      preLoaderRoute: typeof AuthenticatedWorkOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/parts/new': {
+      id: '/_authenticated/parts/new'
+      path: '/parts/new'
+      fullPath: '/parts/new'
+      preLoaderRoute: typeof AuthenticatedPartsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/parts/$id': {
+      id: '/_authenticated/parts/$id'
+      path: '/parts/$id'
+      fullPath: '/parts/$id'
+      preLoaderRoute: typeof AuthenticatedPartsIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/invoices/new': {
+      id: '/_authenticated/invoices/new'
+      path: '/invoices/new'
+      fullPath: '/invoices/new'
+      preLoaderRoute: typeof AuthenticatedInvoicesNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/invoices/$id': {
+      id: '/_authenticated/invoices/$id'
+      path: '/invoices/$id'
+      fullPath: '/invoices/$id'
+      preLoaderRoute: typeof AuthenticatedInvoicesIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedInvoicesIdRoute: typeof AuthenticatedInvoicesIdRoute
+  AuthenticatedInvoicesNewRoute: typeof AuthenticatedInvoicesNewRoute
+  AuthenticatedPartsIdRoute: typeof AuthenticatedPartsIdRoute
+  AuthenticatedPartsNewRoute: typeof AuthenticatedPartsNewRoute
+  AuthenticatedWorkOrdersIdRoute: typeof AuthenticatedWorkOrdersIdRoute
+  AuthenticatedWorkOrdersNewRoute: typeof AuthenticatedWorkOrdersNewRoute
+  AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
+  AuthenticatedPartsIndexRoute: typeof AuthenticatedPartsIndexRoute
+  AuthenticatedWorkOrdersIndexRoute: typeof AuthenticatedWorkOrdersIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedInvoicesIdRoute: AuthenticatedInvoicesIdRoute,
+  AuthenticatedInvoicesNewRoute: AuthenticatedInvoicesNewRoute,
+  AuthenticatedPartsIdRoute: AuthenticatedPartsIdRoute,
+  AuthenticatedPartsNewRoute: AuthenticatedPartsNewRoute,
+  AuthenticatedWorkOrdersIdRoute: AuthenticatedWorkOrdersIdRoute,
+  AuthenticatedWorkOrdersNewRoute: AuthenticatedWorkOrdersNewRoute,
+  AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
+  AuthenticatedPartsIndexRoute: AuthenticatedPartsIndexRoute,
+  AuthenticatedWorkOrdersIndexRoute: AuthenticatedWorkOrdersIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
