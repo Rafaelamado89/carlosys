@@ -8,8 +8,8 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in · Workshop ERP" },
-      { name: "description", content: "Staff sign in for the motorcycle workshop management system." },
+      { title: "Entrar · Workshop ERP" },
+      { name: "description", content: "Acesso de funcionários ao sistema de gestão de oficina." },
     ],
   }),
   component: AuthPage,
@@ -43,14 +43,14 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Account created. You're signed in.");
+        toast.success("Conta criada com sucesso.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
       navigate({ to: "/dashboard" });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Authentication failed");
+      toast.error(err instanceof Error ? err.message : "Falha na autenticação");
     } finally {
       setBusy(false);
     }
@@ -62,7 +62,7 @@ function AuthPage() {
       redirect_uri: window.location.origin,
     });
     if (result.error) {
-      toast.error("Google sign-in failed");
+      toast.error("Falha ao entrar com o Google");
       setBusy(false);
       return;
     }
@@ -79,7 +79,7 @@ function AuthPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Workshop ERP</h1>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest">Staff portal</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest">Portal da Oficina</p>
           </div>
         </div>
 
@@ -93,7 +93,7 @@ function AuthPage() {
                   mode === m ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"
                 }`}
               >
-                {m === "signin" ? "Sign in" : "Create account"}
+                {m === "signin" ? "Entrar" : "Criar conta"}
               </button>
             ))}
           </div>
@@ -101,7 +101,7 @@ function AuthPage() {
           <form onSubmit={submit} className="space-y-4">
             {mode === "signup" && (
               <div>
-                <label className="text-sm font-medium mb-1.5 block">Full name</label>
+                <label className="text-sm font-medium mb-1.5 block">Nome completo</label>
                 <input
                   required
                   value={name}
@@ -121,7 +121,7 @@ function AuthPage() {
               />
             </div>
             <div>
-              <label className="text-sm font-medium mb-1.5 block">Password</label>
+              <label className="text-sm font-medium mb-1.5 block">Palavra-passe</label>
               <input
                 type="password"
                 required
@@ -135,14 +135,14 @@ function AuthPage() {
               disabled={busy}
               className="w-full py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90 disabled:opacity-50"
             >
-              {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+              {busy ? "Por favor aguarde…" : mode === "signin" ? "Entrar" : "Criar conta"}
             </button>
           </form>
 
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t" /></div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">or</span>
+              <span className="bg-card px-2 text-muted-foreground">ou</span>
             </div>
           </div>
 
@@ -151,12 +151,12 @@ function AuthPage() {
             disabled={busy}
             className="w-full py-2.5 rounded-md border bg-background hover:bg-muted font-medium disabled:opacity-50"
           >
-            Continue with Google
+            Continuar com o Google
           </button>
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Internal staff access only.
+          Acesso exclusivo para funcionários da oficina.
         </p>
       </div>
     </div>

@@ -41,30 +41,30 @@ function PartsList() {
     <div className="p-4 lg:p-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Parts</h1>
-          <p className="text-muted-foreground mt-1">External sourcing & tracking</p>
+          <h1 className="text-3xl font-bold tracking-tight">Encomendas de Peças</h1>
+          <p className="text-muted-foreground mt-1">Gestão e controlo de peças encomendadas</p>
         </div>
         <Link to="/parts/new" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-          <Plus className="h-4 w-4" /> New part
+          <Plus className="h-4 w-4" /> Encomendar Peça
         </Link>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input placeholder="Search part, code, model…" value={q} onChange={(e) => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-md border bg-background" />
+          <input placeholder="Pesquisar peça, código ou modelo…" value={q} onChange={(e) => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-md border bg-background" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="px-3 py-2 rounded-md border bg-background">
-          <option value="all">All statuses</option>
+          <option value="all">Todos os estados</option>
           {Object.entries(PART_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
         </select>
       </div>
 
       <div className="bg-card border rounded-xl overflow-hidden">
         {isLoading ? (
-          <div className="p-8 text-center text-muted-foreground text-sm">Loading…</div>
+          <div className="p-8 text-center text-muted-foreground text-sm">A carregar…</div>
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center text-muted-foreground">No parts found.</div>
+          <div className="p-12 text-center text-muted-foreground">Nenhuma encomenda de peça encontrada.</div>
         ) : (
           <div className="divide-y">
             {filtered.map((p) => {
@@ -78,20 +78,20 @@ function PartsList() {
                     <div className="text-xs text-muted-foreground truncate">
                       {p.part_code && <span className="font-mono">{p.part_code}</span>}
                       {p.motorcycle_model && <span> · {p.motorcycle_model}</span>}
-                      {" · Qty "}{p.quantity}
+                      {" · Qtd "}{p.quantity}
                     </div>
                   </div>
                   <div className="hidden sm:block text-right text-sm">
-                    <div className="text-muted-foreground text-xs">Cost / Sell</div>
+                    <div className="text-muted-foreground text-xs">Custo / Venda</div>
                     <div className="font-mono">{money(Number(p.cost_price))} → {money(Number(p.selling_price))}</div>
                   </div>
                   <div className="hidden md:block text-right text-sm">
-                    <div className="text-muted-foreground text-xs">Margin</div>
+                    <div className="text-muted-foreground text-xs">Lucro</div>
                     <div className={`font-mono ${margin >= 0 ? "text-success" : "text-destructive"}`}>{money(margin)}</div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {p.external_url && (
-                      <a href={p.external_url} target="_blank" rel="noreferrer" className="p-2 rounded-md border hover:bg-muted" title="Open supplier">
+                      <a href={p.external_url} target="_blank" rel="noreferrer" className="p-2 rounded-md border hover:bg-muted" title="Abrir site do fornecedor">
                         <ExternalLink className="h-3.5 w-3.5" />
                       </a>
                     )}
