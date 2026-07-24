@@ -19,10 +19,10 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 const NAV = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/work-orders", label: "Work Orders", icon: Wrench },
-  { to: "/parts", label: "Parts", icon: Package },
-  { to: "/invoices", label: "Invoices", icon: FileText },
+  { to: "/dashboard", label: "Início", icon: LayoutDashboard },
+  { to: "/work-orders", label: "Folhas de Obra", icon: Wrench },
+  { to: "/parts", label: "Peças", icon: Package },
+  { to: "/invoices", label: "Orçamentos", icon: FileText },
 ] as const;
 
 function Shell() {
@@ -53,7 +53,7 @@ function Shell() {
           </div>
           <div className="min-w-0">
             <div className="font-bold truncate">Workshop ERP</div>
-            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Staff portal</div>
+            <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Gestão da Oficina</div>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ function Shell() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {theme === "dark" ? "Light mode" : "Dark mode"}
+            {theme === "dark" ? "Modo Claro" : "Modo Escuro"}
           </button>
           <div className="px-3 py-2 text-xs text-muted-foreground truncate">{user?.email}</div>
           <button
@@ -91,7 +91,7 @@ function Shell() {
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           >
             <LogOut className="h-4 w-4" />
-            Sign out
+            Sair da conta
           </button>
         </div>
       </aside>

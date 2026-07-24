@@ -62,19 +62,19 @@ export type InvoiceItem = {
 };
 
 export const WO_STATUS_LABEL: Record<WorkOrder["status"], string> = {
-  open: "Open",
-  in_progress: "In progress",
-  waiting_parts: "Waiting parts",
-  completed: "Completed",
-  cancelled: "Cancelled",
+  open: "Aberta",
+  in_progress: "Em Reparação",
+  waiting_parts: "A Aguardar Peças",
+  completed: "Concluída",
+  cancelled: "Cancelada",
 };
 
 export const PART_STATUS_LABEL: Record<PartRequest["status"], string> = {
-  pending: "Pending",
-  ordered: "Ordered",
-  shipped: "Shipped",
-  received: "Received",
-  cancelled: "Cancelled",
+  pending: "Pendente",
+  ordered: "Encomendada",
+  shipped: "A Caminho",
+  received: "Na Oficina",
+  cancelled: "Cancelada",
 };
 
 export const WO_STATUS_CLASS: Record<WorkOrder["status"], string> = {

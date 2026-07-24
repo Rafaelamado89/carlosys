@@ -57,7 +57,7 @@ function WorkOrderDetail() {
   const [form, setForm] = useState<WorkOrder | null>(null);
   useEffect(() => { if (wo) setForm(wo); }, [wo]);
 
-  if (isLoading || !form) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  if (isLoading || !form) return <div className="p-8 text-muted-foreground">A carregar…</div>;
 
   const save = async () => {
     const { error } = await supabase
@@ -73,16 +73,16 @@ function WorkOrderDetail() {
       })
       .eq("id", id);
     if (error) return toast.error(error.message);
-    toast.success("Saved");
+    toast.success("Alterações guardadas com sucesso");
     qc.invalidateQueries({ queryKey: ["work_order", id] });
     qc.invalidateQueries({ queryKey: ["work_orders", "list"] });
   };
 
   const remove = async () => {
-    if (!confirm("Delete this work order?")) return;
+    if (!confirm("Eliminar esta folha de obra?")) return;
     const { error } = await supabase.from("work_orders").delete().eq("id", id);
     if (error) return toast.error(error.message);
-    toast.success("Deleted");
+    toast.success("Folha de obra eliminada");
     nav({ to: "/work-orders" });
   };
 
@@ -135,7 +135,7 @@ function WorkOrderDetail() {
   return (
     <div className="p-4 lg:p-8 max-w-5xl mx-auto">
       <Link to="/work-orders" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4">
-        <ArrowLeft className="h-4 w-4" /> All work orders
+        <ArrowLeft className="h-4 w-4" /> Voltar às folhas de obra
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
@@ -153,9 +153,9 @@ function WorkOrderDetail() {
         </div>
         <div className="flex gap-2">
           <button onClick={createInvoice} className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-            <FileText className="h-4 w-4" /> New invoice
+            <FileText className="h-4 w-4" /> Passar a Orçamento
           </button>
-          <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10" aria-label="Delete">
+          <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10" aria-label="Eliminar">
             <Trash2 className="h-4 w-4" />
           </button>
         </div>
@@ -164,27 +164,27 @@ function WorkOrderDetail() {
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-card border rounded-xl p-6">
-            <h2 className="font-semibold mb-4">Details</h2>
+            <h2 className="font-semibold mb-4">Dados da Folha de Obra</h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              <F label="Client name"><input value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Phone"><input value={form.client_phone ?? ""} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Make"><input value={form.motorcycle_make} onChange={(e) => setForm({ ...form, motorcycle_make: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Model"><input value={form.motorcycle_model} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="License plate"><input value={form.license_plate ?? ""} onChange={(e) => setForm({ ...form, license_plate: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Status">
+              <F label="Nome do cliente"><input value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Telefone"><input value={form.client_phone ?? ""} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Marca"><input value={form.motorcycle_make} onChange={(e) => setForm({ ...form, motorcycle_make: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Modelo"><input value={form.motorcycle_model} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Matrícula"><input value={form.license_plate ?? ""} onChange={(e) => setForm({ ...form, license_plate: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+              <F label="Estado">
                 <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as WorkOrder["status"] })} className="w-full px-3 py-2 rounded-md border bg-background">
                   {Object.entries(WO_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                 </select>
               </F>
             </div>
             <div className="mt-4">
-              <F label="Notes / diagnosis">
+              <F label="Observações / Diagnóstico da avaria">
                 <textarea rows={4} value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" />
               </F>
             </div>
             <div className="mt-4 flex justify-end">
               <button onClick={save} className="px-5 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-                Save changes
+                Guardar Alterações
               </button>
             </div>
           </div>
@@ -193,14 +193,14 @@ function WorkOrderDetail() {
             <div className="px-5 py-4 border-b flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Package className="h-4 w-4 text-primary" />
-                <h2 className="font-semibold">Linked parts</h2>
+                <h2 className="font-semibold">Peças encomendadas para esta mota</h2>
               </div>
               <Link to="/parts/new" search={{ workOrderId: id }} className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-                <Plus className="h-3.5 w-3.5" /> Add part
+                <Plus className="h-3.5 w-3.5" /> Encomendar peça
               </Link>
             </div>
             {parts.length === 0 ? (
-              <div className="p-6 text-center text-sm text-muted-foreground">No parts linked yet.</div>
+              <div className="p-6 text-center text-sm text-muted-foreground">Ainda não há peças encomendadas para esta folha de obra.</div>
             ) : (
               <div className="divide-y">
                 {parts.map((p) => (
@@ -211,12 +211,12 @@ function WorkOrderDetail() {
                       </Link>
                       <div className="text-xs text-muted-foreground">
                         {p.part_code && <span className="font-mono">{p.part_code} · </span>}
-                        Qty {p.quantity} · Cost {money(Number(p.cost_price))} · Sell {money(Number(p.selling_price))}
+                        Qtd {p.quantity} · Custo {money(Number(p.cost_price))} · Venda {money(Number(p.selling_price))}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       {p.external_url && (
-                        <a href={p.external_url} target="_blank" rel="noreferrer" className="p-2 rounded-md border hover:bg-muted" title="Open supplier link">
+                        <a href={p.external_url} target="_blank" rel="noreferrer" className="p-2 rounded-md border hover:bg-muted" title="Abrir site do fornecedor">
                           <ExternalLink className="h-3.5 w-3.5" />
                         </a>
                       )}
@@ -234,16 +234,16 @@ function WorkOrderDetail() {
         <div className="bg-card border rounded-xl overflow-hidden h-fit">
           <div className="px-5 py-4 border-b flex items-center gap-2">
             <FileText className="h-4 w-4 text-primary" />
-            <h2 className="font-semibold">Invoices</h2>
+            <h2 className="font-semibold">Orçamentos gerados</h2>
           </div>
           {invoices.length === 0 ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">No invoices yet.</div>
+            <div className="p-6 text-center text-sm text-muted-foreground">Nenhum orçamento gerado ainda.</div>
           ) : (
             <div className="divide-y">
               {invoices.map((inv) => (
                 <Link key={inv.id} to="/invoices/$id" params={{ id: inv.id }} className="block p-4 hover:bg-muted/50">
                   <div className="font-mono text-xs text-primary">{inv.invoice_number}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{new Date(inv.created_at).toLocaleDateString()}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{new Date(inv.created_at).toLocaleDateString("pt-PT")}</div>
                 </Link>
               ))}
             </div>
