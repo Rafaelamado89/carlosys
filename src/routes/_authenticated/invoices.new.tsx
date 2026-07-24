@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Wrench } from "lucide-react";
+import type { WorkOrder } from "@/lib/workshop";
 
 export const Route = createFileRoute("/_authenticated/invoices/new")({
   head: () => ({ meta: [{ title: "Novo orçamento · Workshop ERP" }] }),
@@ -12,6 +14,7 @@ export const Route = createFileRoute("/_authenticated/invoices/new")({
 function NewInvoice() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [workOrderId, setWorkOrderId] = useState<string>("");
   const [form, setForm] = useState({
     client_name: "",
     client_phone: "",
@@ -29,31 +32,96 @@ function NewInvoice() {
     notes: "",
   });
 
+  const { data: workOrders = [] } = useQuery({
+    queryKey: ["work_orders", "picker"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("work_orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as WorkOrder[];
+    },
+  });
+
+  const handleSelectWorkOrder = (woId: string) => {
+    setWorkOrderId(woId);
+    if (!woId) return;
+    const wo = workOrders.find((w) => w.id === woId);
+    if (wo) {
+      setForm((prev) => ({
+        ...prev,
+        client_name: wo.client_name || prev.client_name,
+        client_phone: wo.client_phone || prev.client_phone,
+        moto_brand: wo.motorcycle_make || prev.moto_brand,
+        moto_model: wo.motorcycle_model || prev.moto_model,
+        moto_plate: wo.license_plate || prev.moto_plate,
+        obs: wo.notes || prev.obs,
+      }));
+    }
+  };
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     const { data: user } = await supabase.auth.getUser();
-    const { data, error } = await supabase.from("invoices").insert({
-      client_name: form.client_name,
-      client_phone: form.client_phone || null,
-      client_email: form.client_email || null,
-      client_address: form.client_address || null,
-      client_tax_id: form.client_tax_id || null,
-      obs: form.obs || null,
-      moto_brand: form.moto_brand || null,
-      moto_model: form.moto_model || null,
-      moto_plate: form.moto_plate || null,
-      moto_kms: form.moto_kms ? Number(form.moto_kms) : null,
-      moto_vin: form.moto_vin || null,
-      motorcycle_info: [form.moto_brand, form.moto_model, form.moto_plate].filter(Boolean).join(" ") || null,
-      vat_rate: form.vat_rate,
-      retention: form.retention,
-      notes: form.notes || null,
-      created_by: user.user?.id,
-    }).select().single();
+    const { data, error } = await supabase
+      .from("invoices")
+      .insert({
+        work_order_id: workOrderId || null,
+        client_name: form.client_name,
+        client_phone: form.client_phone || null,
+        client_email: form.client_email || null,
+        client_address: form.client_address || null,
+        client_tax_id: form.client_tax_id || null,
+        obs: form.obs || null,
+        moto_brand: form.moto_brand || null,
+        moto_model: form.moto_model || null,
+        moto_plate: form.moto_plate || null,
+        moto_kms: form.moto_kms ? Number(form.moto_kms) : null,
+        moto_vin: form.moto_vin || null,
+        motorcycle_info: [form.moto_brand, form.moto_model, form.moto_plate].filter(Boolean).join(" ") || null,
+        vat_rate: form.vat_rate,
+        retention: form.retention,
+        notes: form.notes || null,
+        created_by: user.user?.id,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      setBusy(false);
+      return toast.error(error.message);
+    }
+
+    if (workOrderId) {
+      const { data: partsList } = await supabase
+        .from("parts_requests")
+        .select("*")
+        .eq("work_order_id", workOrderId)
+        .neq("status", "cancelled")
+        .order("created_at", { ascending: true });
+
+      if (partsList && partsList.length > 0) {
+        const itemsToInsert = partsList.map((p, idx) => ({
+          invoice_id: data.id,
+          item_type: "part",
+          description: p.part_code ? `${p.part_name} (${p.part_code})` : p.part_name,
+          quantity: p.quantity || 1,
+          unit_price: Number(p.selling_price) || 0,
+          discount: 0,
+          position: idx,
+        }));
+        await supabase.from("invoice_items").insert(itemsToInsert);
+        toast.success(`Orçamento criado com ${partsList.length} peça(s) adicionada(s)`);
+      } else {
+        toast.success("Orçamento criado");
+      }
+    } else {
+      toast.success("Orçamento criado");
+    }
+
     setBusy(false);
-    if (error) return toast.error(error.message);
-    toast.success("Orçamento criado");
     nav({ to: "/invoices/$id", params: { id: data!.id } });
   };
 
@@ -65,6 +133,29 @@ function NewInvoice() {
       <h1 className="text-3xl font-bold tracking-tight mb-6">Novo orçamento</h1>
 
       <form onSubmit={submit} className="bg-card border rounded-xl p-6 space-y-5">
+        {workOrders.length > 0 && (
+          <div className="p-4 border rounded-lg bg-muted/40 space-y-2">
+            <div className="text-sm font-semibold flex items-center gap-2">
+              <Wrench className="h-4 w-4 text-primary" /> Folha de Obra a associar (opcional)
+            </div>
+            <select
+              value={workOrderId}
+              onChange={(e) => handleSelectWorkOrder(e.target.value)}
+              className="w-full px-3 py-2 rounded-md border bg-background text-sm"
+            >
+              <option value="">— Sem folha de obra —</option>
+              {workOrders.map((wo) => (
+                <option key={wo.id} value={wo.id}>
+                  {wo.client_name} — {wo.motorcycle_make} {wo.motorcycle_model} {wo.license_plate ? `(${wo.license_plate})` : ""}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-muted-foreground">
+              Ao selecionar uma folha de obra, os dados do cliente/veículo e as peças encomendadas serão importados automaticamente.
+            </p>
+          </div>
+        )}
+
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-semibold">Cliente</div>
           <div className="grid sm:grid-cols-2 gap-4">

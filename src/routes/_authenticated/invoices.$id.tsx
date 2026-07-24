@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { money, type Invoice, type InvoiceItem } from "@/lib/workshop";
-import { ArrowLeft, Plus, Printer, Trash2, Save, Eye } from "lucide-react";
+import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
@@ -80,6 +80,33 @@ function InvoiceDetail() {
       ],
     });
   };
+
+  const importWorkOrderParts = async () => {
+    if (!invoice.work_order_id) return toast.error("Sem folha de obra associada a este orçamento.");
+    const { data: partsList, error } = await supabase
+      .from("parts_requests")
+      .select("*")
+      .eq("work_order_id", invoice.work_order_id)
+      .neq("status", "cancelled");
+    if (error) return toast.error(error.message);
+    if (!partsList || partsList.length === 0) {
+      return toast.info("Nenhuma peça encomendada encontrada na folha de obra.");
+    }
+    const newItems = partsList.map((p, idx) => ({
+      id: `new-${Date.now()}-${Math.random()}`,
+      invoice_id: id,
+      item_type: "part" as const,
+      description: p.part_code ? `${p.part_name} (${p.part_code})` : p.part_name,
+      quantity: p.quantity || 1,
+      unit_price: Number(p.selling_price) || 0,
+      discount: 0,
+      position: items.length + idx,
+      _new: true,
+    }));
+    setDraft({ ...draft, items: [...items, ...newItems] });
+    toast.success(`${newItems.length} peça(s) importada(s) da folha de obra`);
+  };
+
   const removeItem = (idx: number) => {
     setDraft({ ...draft, items: items.filter((_, i) => i !== idx) });
   };
@@ -204,9 +231,16 @@ function InvoiceDetail() {
         <div className="bg-card border rounded-xl overflow-hidden mb-6">
           <div className="px-5 py-3 border-b flex items-center justify-between">
             <h3 className="font-semibold">Linhas do orçamento</h3>
-            <button onClick={addItem} className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-              <Plus className="h-3.5 w-3.5" /> Adicionar linha
-            </button>
+            <div className="flex items-center gap-3">
+              {invoice.work_order_id && (
+                <button onClick={importWorkOrderParts} className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
+                  <Package className="h-3.5 w-3.5" /> Importar peças da folha de obra
+                </button>
+              )}
+              <button onClick={addItem} className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
+                <Plus className="h-3.5 w-3.5" /> Adicionar linha
+              </button>
+            </div>
           </div>
           <div className="hidden md:grid grid-cols-[5rem_minmax(0,1fr)_6rem_7rem_5rem_7rem_2.5rem] gap-2 px-3 py-2 text-xs uppercase text-muted-foreground border-b">
             <div>Qtde</div>

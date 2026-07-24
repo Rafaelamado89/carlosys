@@ -104,19 +104,21 @@
 @media print {
   @page {
     size: A4;
-    margin: 14mm;
+    margin: 0;
   }
   html, body {
     background: white !important;
     color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  .no-print, .no-print * {
+  .no-print, .no-print *, [data-sonner-toaster], [data-sonner-toast] {
     display: none !important;
   }
   .print-area {
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
+    padding: 15mm 20mm !important;
     margin: 0 !important;
     max-width: 100% !important;
     background: white !important;

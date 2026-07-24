@@ -93,12 +93,42 @@ function WorkOrderDetail() {
       .insert({
         work_order_id: id,
         client_name: form.client_name,
+        client_phone: form.client_phone || null,
+        moto_brand: form.motorcycle_make || null,
+        moto_model: form.motorcycle_model || null,
+        moto_plate: form.license_plate || null,
+        obs: form.notes || null,
         motorcycle_info: `${form.motorcycle_make} ${form.motorcycle_model}${form.license_plate ? ` · ${form.license_plate}` : ""}`,
         created_by: user.user?.id,
       })
       .select()
       .single();
     if (error) return toast.error(error.message);
+
+    // Fetch and automatically add parts linked to this work order
+    const { data: partsList } = await supabase
+      .from("parts_requests")
+      .select("*")
+      .eq("work_order_id", id)
+      .neq("status", "cancelled")
+      .order("created_at", { ascending: true });
+
+    if (partsList && partsList.length > 0) {
+      const itemsToInsert = partsList.map((p, idx) => ({
+        invoice_id: data.id,
+        item_type: "part",
+        description: p.part_code ? `${p.part_name} (${p.part_code})` : p.part_name,
+        quantity: p.quantity || 1,
+        unit_price: Number(p.selling_price) || 0,
+        discount: 0,
+        position: idx,
+      }));
+      await supabase.from("invoice_items").insert(itemsToInsert);
+      toast.success(`Orçamento criado com ${partsList.length} peça(s) adicionada(s)`);
+    } else {
+      toast.success("Orçamento criado");
+    }
+
     nav({ to: "/invoices/$id", params: { id: data!.id } });
   };
 
