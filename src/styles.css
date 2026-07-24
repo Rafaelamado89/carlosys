@@ -100,6 +100,18 @@
   }
 }
 
+/* Hide Lovable bottom right badge / widget */
+#lovable-badge,
+[id*="lovable-badge"],
+[class*="lovable-badge"],
+[data-lovable-badge],
+a[href*="lovable.dev"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Print styles: strip UI chrome, A4 optimized */
 @media print {
   @page {
@@ -112,8 +124,17 @@
     margin: 0 !important;
     padding: 0 !important;
   }
-  .no-print, .no-print *, [data-sonner-toaster], [data-sonner-toast] {
+  .no-print,
+  .no-print *,
+  [data-sonner-toaster],
+  [data-sonner-toast],
+  .sonner-toaster,
+  #sonner-toaster,
+  #lovable-badge,
+  [id*="lovable"] {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
   .print-area {
     box-shadow: none !important;

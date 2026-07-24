@@ -111,7 +111,7 @@ function InvoiceDetail() {
     setDraft({ ...draft, items: items.filter((_, i) => i !== idx) });
   };
 
-  const save = async () => {
+  const save = async (silent = false) => {
     const { error: uErr } = await supabase.from("invoices").update({
       client_name: invoice.client_name,
       client_phone: invoice.client_phone,
@@ -151,7 +151,7 @@ function InvoiceDetail() {
         await supabase.from("invoice_items").update(payload).eq("id", it.id);
       }
     }
-    toast.success("Orçamento guardado");
+    if (!silent) toast.success("Orçamento guardado");
     qc.invalidateQueries({ queryKey: ["invoice", id] });
     qc.invalidateQueries({ queryKey: ["invoices", "list"] });
   };
@@ -164,9 +164,10 @@ function InvoiceDetail() {
   };
 
   const doPrint = async () => {
-    await save();
+    await save(true);
     setShowPreview(true);
-    setTimeout(() => window.print(), 300);
+    toast.dismiss();
+    setTimeout(() => window.print(), 100);
   };
 
   return (

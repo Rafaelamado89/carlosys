@@ -133,28 +133,30 @@ function NewInvoice() {
       <h1 className="text-3xl font-bold tracking-tight mb-6">Novo orçamento</h1>
 
       <form onSubmit={submit} className="bg-card border rounded-xl p-6 space-y-5">
-        {workOrders.length > 0 && (
-          <div className="p-4 border rounded-lg bg-muted/40 space-y-2">
-            <div className="text-sm font-semibold flex items-center gap-2">
-              <Wrench className="h-4 w-4 text-primary" /> Folha de Obra a associar (opcional)
-            </div>
-            <select
-              value={workOrderId}
-              onChange={(e) => handleSelectWorkOrder(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border bg-background text-sm"
-            >
-              <option value="">— Sem folha de obra —</option>
-              {workOrders.map((wo) => (
-                <option key={wo.id} value={wo.id}>
-                  {wo.client_name} — {wo.motorcycle_make} {wo.motorcycle_model} {wo.license_plate ? `(${wo.license_plate})` : ""}
-                </option>
-              ))}
-            </select>
-            <p className="text-xs text-muted-foreground">
-              Ao selecionar uma folha de obra, os dados do cliente/veículo e as peças encomendadas serão importados automaticamente.
-            </p>
+        <div className="p-4 border border-primary/30 rounded-xl bg-primary/5 space-y-3">
+          <div className="text-sm font-semibold flex items-center gap-2 text-primary">
+            <Wrench className="h-4 w-4" /> Selecionar Mota / Pedido de Oficina (Auto-preenchimento)
           </div>
-        )}
+          <select
+            value={workOrderId}
+            onChange={(e) => handleSelectWorkOrder(e.target.value)}
+            className="w-full px-3 py-2.5 rounded-md border bg-background font-medium text-sm focus:ring-2 focus:ring-primary"
+          >
+            <option value="">— Selecionar Mota / Pedido —</option>
+            {workOrders.map((wo) => {
+              const motoInfo = [wo.motorcycle_make, wo.motorcycle_model].filter(Boolean).join(" ");
+              const plateInfo = wo.license_plate ? ` (${wo.license_plate})` : "";
+              return (
+                <option key={wo.id} value={wo.id}>
+                  🏍️ {motoInfo || "Mota"} {plateInfo} — Cliente: {wo.client_name}
+                </option>
+              );
+            })}
+          </select>
+          <p className="text-xs text-muted-foreground">
+            Ao selecionar uma mota/pedido, os dados do cliente, veículo e as peças encomendadas são preenchidos automaticamente.
+          </p>
+        </div>
 
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-semibold">Cliente</div>
