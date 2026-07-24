@@ -28,7 +28,7 @@ function NewInvoice() {
     moto_kms: "",
     moto_vin: "",
     vat_rate: 23,
-    retention: false,
+    retention: true,
     notes: "",
   });
 
@@ -165,7 +165,6 @@ function NewInvoice() {
             <F label="NIF"><input value={form.client_tax_id} onChange={(e) => setForm({ ...form, client_tax_id: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Telefone"><input value={form.client_phone} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Email"><input type="email" value={form.client_email} onChange={(e) => setForm({ ...form, client_email: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-            <F label="Morada"><input value={form.client_address} onChange={(e) => setForm({ ...form, client_address: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Observações"><input value={form.obs} onChange={(e) => setForm({ ...form, obs: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
           </div>
         </div>

@@ -206,7 +206,6 @@ function InvoiceDetail() {
             <F label="NIF"><input value={invoice.client_tax_id ?? ""} onChange={(e) => setInv({ client_tax_id: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Telefone"><input value={invoice.client_phone ?? ""} onChange={(e) => setInv({ client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Email"><input value={invoice.client_email ?? ""} onChange={(e) => setInv({ client_email: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-            <F label="Morada"><input value={invoice.client_address ?? ""} onChange={(e) => setInv({ client_address: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="OBS"><input value={invoice.obs ?? ""} onChange={(e) => setInv({ obs: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
           </div>
           <div className="space-y-3">
@@ -301,7 +300,6 @@ function InvoiceDetail() {
                   <InfoRow label="Telefone:" value={invoice.client_phone} />
                   <InfoRow label="Email:" value={invoice.client_email} />
                   <InfoRow label="NIF:" value={invoice.client_tax_id} />
-                  <InfoRow label="Morada:" value={invoice.client_address} />
                   <InfoRow label="OBS:" value={invoice.obs} />
                 </tbody>
               </table>
