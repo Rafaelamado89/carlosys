@@ -97,7 +97,7 @@ function WorkOrderDetail() {
         moto_brand: form.motorcycle_make || null,
         moto_model: form.motorcycle_model || null,
         moto_plate: form.license_plate || null,
-        obs: form.notes || null,
+        obs: null,
         motorcycle_info: `${form.motorcycle_make} ${form.motorcycle_model}${form.license_plate ? ` · ${form.license_plate}` : ""}`,
         created_by: user.user?.id,
       })
