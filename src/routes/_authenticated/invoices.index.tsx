@@ -8,8 +8,8 @@ import { useState } from "react";
 export const Route = createFileRoute("/_authenticated/invoices/")({
   head: () => ({
     meta: [
-      { title: "Invoices · Workshop ERP" },
-      { name: "description", content: "All workshop invoices, printable and ready for A4." },
+      { title: "Orçamentos · Workshop ERP" },
+      { name: "description", content: "Todos os orçamentos da oficina, prontos para imprimir em A4." },
     ],
   }),
   component: InvoicesList,
@@ -42,27 +42,27 @@ function InvoicesList() {
     <div className="p-4 lg:p-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Invoices</h1>
-          <p className="text-muted-foreground mt-1">{data.length} total</p>
+          <h1 className="text-3xl font-bold tracking-tight">Orçamentos</h1>
+          <p className="text-muted-foreground mt-1">{data.length} no total</p>
         </div>
         <Link to="/invoices/new" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-          <Plus className="h-4 w-4" /> New invoice
+          <Plus className="h-4 w-4" /> Novo orçamento
         </Link>
       </div>
 
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <input placeholder="Search number, client, bike…" value={q} onChange={(e) => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-md border bg-background" />
+        <input placeholder="Procurar por número, cliente ou mota…" value={q} onChange={(e) => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 rounded-md border bg-background" />
       </div>
 
       <div className="bg-card border rounded-xl overflow-hidden">
         {isLoading ? (
-          <div className="p-8 text-center text-muted-foreground text-sm">Loading…</div>
+          <div className="p-8 text-center text-muted-foreground text-sm">A carregar…</div>
         ) : filtered.length === 0 ? (
           <div className="p-12 text-center">
             <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-            <div className="text-muted-foreground mb-3">No invoices yet.</div>
-            <Link to="/invoices/new" className="text-primary hover:underline text-sm">Create the first one</Link>
+            <div className="text-muted-foreground mb-3">Ainda não há orçamentos.</div>
+            <Link to="/invoices/new" className="text-primary hover:underline text-sm">Criar o primeiro</Link>
           </div>
         ) : (
           <div className="divide-y">
@@ -77,7 +77,7 @@ function InvoicesList() {
                     {inv.motorcycle_info && <div className="text-xs text-muted-foreground truncate">{inv.motorcycle_info}</div>}
                   </div>
                   <div className="hidden sm:block text-xs text-muted-foreground">
-                    {new Date(inv.created_at).toLocaleDateString()}
+                    {new Date(inv.created_at).toLocaleDateString("pt-PT")}
                   </div>
                   <div className="font-mono font-semibold">{money(total)}</div>
                 </Link>
