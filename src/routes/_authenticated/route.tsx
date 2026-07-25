@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 const NAV = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
-  { to: "/work-orders", label: "Folhas de Obra", icon: Wrench },
+  { to: "/work-orders", label: "Registos", icon: Wrench },
   { to: "/parts", label: "Peças", icon: Package },
   { to: "/invoices", label: "Orçamentos", icon: FileText },
 ] as const;

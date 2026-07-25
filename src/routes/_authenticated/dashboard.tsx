@@ -68,7 +68,7 @@ function Dashboard() {
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90"
         >
           <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">Nova folha de obra</span>
+          <span className="hidden sm:inline">Criar novo Registo</span>
           <span className="sm:hidden">Nova</span>
         </Link>
       </div>
@@ -83,12 +83,12 @@ function Dashboard() {
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-card border rounded-xl overflow-hidden">
           <div className="px-5 py-4 border-b flex items-center justify-between">
-            <h2 className="font-semibold">Folhas de obra ativas</h2>
-            <Link to="/work-orders" className="text-sm text-primary hover:underline">Ver todas</Link>
+            <h2 className="font-semibold">Registos Ativos</h2>
+            <Link to="/work-orders" className="text-sm text-primary hover:underline">Ver todos</Link>
           </div>
           <div className="divide-y">
             {active.length === 0 && (
-              <div className="p-8 text-center text-muted-foreground text-sm">Sem folhas de obra ativas.</div>
+              <div className="p-8 text-center text-muted-foreground text-sm">Nenhum registo encontrado.</div>
             )}
             {active.slice(0, 8).map((o) => (
               <Link
