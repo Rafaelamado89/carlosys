@@ -183,7 +183,7 @@ function InvoiceDetail() {
             <h1 className="text-3xl font-bold tracking-tight">{invoice.client_name || "Sem cliente"}</h1>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button onClick={save} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted">
+            <button onClick={() => save()} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted">
               <Save className="h-4 w-4" /> Guardar
             </button>
             <button onClick={() => setShowPreview((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted">
