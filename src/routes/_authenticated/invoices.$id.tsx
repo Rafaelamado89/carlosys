@@ -261,7 +261,7 @@ function InvoiceDetail() {
                   <input placeholder="Descrição" value={it.description} onChange={(e) => updateItem(idx, { description: e.target.value })} className="col-span-2 md:col-span-1 px-3 py-2 rounded-md border bg-background" />
                   <input type="number" step="0.01" placeholder="Preço un." value={it.unit_price} onChange={(e) => updateItem(idx, { unit_price: parseFloat(e.target.value) || 0 })} className="px-2 py-2 rounded-md border bg-background text-right" />
                   <div className="text-right font-mono text-sm text-muted-foreground">{money(gross)}</div>
-                  <input type="number" step="0.01" min="0" max="1" placeholder="0.10" value={it.discount ?? 0} onChange={(e) => updateItem(idx, { discount: parseFloat(e.target.value) || 0 })} className="px-2 py-2 rounded-md border bg-background text-right" />
+                  <input type="number" step="1" min="0" max="100" placeholder="% desc." value={Math.round((Number(it.discount) || 0) * 100)} onChange={(e) => updateItem(idx, { discount: (parseFloat(e.target.value) || 0) / 100 })} className="px-2 py-2 rounded-md border bg-background text-right" />
                   <div className="text-right font-mono text-sm font-semibold">{money(net)}</div>
                   <button onClick={() => removeItem(idx)} className="p-2 rounded-md text-destructive hover:bg-destructive/10 justify-self-end">
                     <Trash2 className="h-3.5 w-3.5" />
