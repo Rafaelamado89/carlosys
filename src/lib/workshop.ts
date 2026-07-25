@@ -96,5 +96,10 @@ export const PART_STATUS_CLASS: Record<PartRequest["status"], string> = {
 export const money = (n: number, currency = "EUR") =>
   new Intl.NumberFormat(undefined, { style: "currency", currency }).format(n || 0);
 
+export function formatLicensePlate(value: string): string {
+  const cleaned = value.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6).toUpperCase();
+  return cleaned.match(/.{1,2}/g)?.join("-") ?? "";
+}
+
 // Suppress unused import warning for types file consumers
 export type _DbRef = Database;

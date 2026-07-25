@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { WO_STATUS_LABEL } from "@/lib/workshop";
+import { WO_STATUS_LABEL, formatLicensePlate } from "@/lib/workshop";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
@@ -51,7 +51,7 @@ function NewWorkOrder() {
           <Field label="Telefone" value={form.client_phone} onChange={(v) => setForm({ ...form, client_phone: v })} />
           <Field label="Marca da mota" required value={form.motorcycle_make} onChange={(v) => setForm({ ...form, motorcycle_make: v })} />
           <Field label="Modelo da mota" required value={form.motorcycle_model} onChange={(v) => setForm({ ...form, motorcycle_model: v })} />
-          <Field label="Matrícula" value={form.license_plate} onChange={(v) => setForm({ ...form, license_plate: v })} />
+          <Field label="Matrícula" value={form.license_plate} onChange={(v) => setForm({ ...form, license_plate: formatLicensePlate(v) })} />
           <div>
             <label className="text-sm font-medium mb-1.5 block">Estado</label>
             <select

@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   WO_STATUS_CLASS, WO_STATUS_LABEL, PART_STATUS_CLASS, PART_STATUS_LABEL,
-  money, type WorkOrder, type PartRequest, type Invoice,
+  money, formatLicensePlate, type WorkOrder, type PartRequest, type Invoice,
 } from "@/lib/workshop";
 import { ArrowLeft, ExternalLink, FileText, Package, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -170,7 +170,7 @@ function WorkOrderDetail() {
               <F label="Telefone"><input value={form.client_phone ?? ""} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
               <F label="Marca"><input value={form.motorcycle_make} onChange={(e) => setForm({ ...form, motorcycle_make: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
               <F label="Modelo"><input value={form.motorcycle_model} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Matrícula"><input value={form.license_plate ?? ""} onChange={(e) => setForm({ ...form, license_plate: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+              <F label="Matrícula"><input value={form.license_plate ?? ""} onChange={(e) => setForm({ ...form, license_plate: formatLicensePlate(e.target.value) })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
               <F label="Estado">
                 <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as WorkOrder["status"] })} className="w-full px-3 py-2 rounded-md border bg-background">
                   {Object.entries(WO_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
