@@ -105,7 +105,7 @@ function NewInvoice() {
       if (partsList && partsList.length > 0) {
         const itemsToInsert = partsList.map((p, idx) => ({
           invoice_id: data.id,
-          item_type: "part",
+          item_type: "part" as const,
           description: p.part_name,
           quantity: p.quantity || 1,
           unit_price: Number(p.selling_price) || 0,
