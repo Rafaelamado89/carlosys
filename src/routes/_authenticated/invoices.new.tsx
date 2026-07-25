@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ArrowLeft, Wrench } from "lucide-react";
-import type { WorkOrder } from "@/lib/workshop";
+import { formatLicensePlate, type WorkOrder } from "@/lib/workshop";
 
 export const Route = createFileRoute("/_authenticated/invoices/new")({
   head: () => ({ meta: [{ title: "Novo orçamento · Workshop ERP" }] }),
@@ -174,7 +174,7 @@ function NewInvoice() {
           <div className="grid sm:grid-cols-2 gap-4">
             <F label="Marca"><input value={form.moto_brand} onChange={(e) => setForm({ ...form, moto_brand: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Modelo"><input value={form.moto_model} onChange={(e) => setForm({ ...form, moto_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-            <F label="Matrícula"><input value={form.moto_plate} onChange={(e) => setForm({ ...form, moto_plate: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+            <F label="Matrícula"><input value={form.moto_plate} onChange={(e) => setForm({ ...form, moto_plate: formatLicensePlate(e.target.value) })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
             <F label="Kms"><input type="number" value={form.moto_kms} onChange={(e) => setForm({ ...form, moto_kms: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="VIN"><input value={form.moto_vin} onChange={(e) => setForm({ ...form, moto_vin: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
           </div>

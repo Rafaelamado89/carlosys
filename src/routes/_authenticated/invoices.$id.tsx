@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { money, type Invoice, type InvoiceItem } from "@/lib/workshop";
+import { money, formatLicensePlate, type Invoice, type InvoiceItem } from "@/lib/workshop";
 import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -212,7 +212,7 @@ function InvoiceDetail() {
             <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Motociclo</div>
             <F label="Marca"><input value={invoice.moto_brand ?? ""} onChange={(e) => setInv({ moto_brand: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Modelo"><input value={invoice.moto_model ?? ""} onChange={(e) => setInv({ moto_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-            <F label="Matrícula"><input value={invoice.moto_plate ?? ""} onChange={(e) => setInv({ moto_plate: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+            <F label="Matrícula"><input value={invoice.moto_plate ?? ""} onChange={(e) => setInv({ moto_plate: formatLicensePlate(e.target.value) })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
             <F label="Kms"><input type="number" value={invoice.moto_kms ?? ""} onChange={(e) => setInv({ moto_kms: e.target.value ? Number(e.target.value) : null })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="VIN"><input value={invoice.moto_vin ?? ""} onChange={(e) => setInv({ moto_vin: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
             <div className="grid grid-cols-2 gap-3">
