@@ -98,9 +98,9 @@ function Dashboard() {
                 className="flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
               >
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{o.client_name}</div>
+                  <div className="font-medium truncate">{o.client_name || "Sem cliente"}</div>
                   <div className="text-sm text-muted-foreground truncate">
-                    {o.motorcycle_make} {o.motorcycle_model}
+                    {[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Sem mota"}
                     {o.license_plate && <span className="ml-2 font-mono text-xs">· {o.license_plate}</span>}
                   </div>
                 </div>
@@ -129,7 +129,7 @@ function Dashboard() {
                 className="block p-4 hover:bg-muted/50"
               >
                 <div className="font-mono text-xs text-primary">{inv.invoice_number}</div>
-                <div className="text-sm font-medium truncate mt-0.5">{inv.client_name}</div>
+                <div className="text-sm font-medium truncate mt-0.5">{inv.client_name || "Sem cliente"}</div>
                 <div className="text-xs text-muted-foreground">
                   {new Date(inv.created_at).toLocaleDateString("pt-PT")}
                 </div>
