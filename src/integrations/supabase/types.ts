@@ -17,7 +17,7 @@ export type Database = {
       invoice_items: {
         Row: {
           created_at: string
-          description: string
+          description: string | null
           discount: number
           id: string
           invoice_id: string
@@ -28,7 +28,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          description: string
+          description?: string | null
           discount?: number
           id?: string
           invoice_id: string
@@ -39,7 +39,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          description?: string
+          description?: string | null
           discount?: number
           id?: string
           invoice_id?: string
@@ -62,7 +62,7 @@ export type Database = {
         Row: {
           client_address: string | null
           client_email: string | null
-          client_name: string
+          client_name: string | null
           client_phone: string | null
           client_tax_id: string | null
           created_at: string
@@ -85,7 +85,7 @@ export type Database = {
         Insert: {
           client_address?: string | null
           client_email?: string | null
-          client_name: string
+          client_name?: string | null
           client_phone?: string | null
           client_tax_id?: string | null
           created_at?: string
@@ -108,7 +108,7 @@ export type Database = {
         Update: {
           client_address?: string | null
           client_email?: string | null
-          client_name?: string
+          client_name?: string | null
           client_phone?: string | null
           client_tax_id?: string | null
           created_at?: string
@@ -148,7 +148,7 @@ export type Database = {
           motorcycle_model: string | null
           notes: string | null
           part_code: string | null
-          part_name: string
+          part_name: string | null
           quantity: number
           selling_price: number
           status: Database["public"]["Enums"]["part_order_status"]
@@ -164,7 +164,7 @@ export type Database = {
           motorcycle_model?: string | null
           notes?: string | null
           part_code?: string | null
-          part_name: string
+          part_name?: string | null
           quantity?: number
           selling_price?: number
           status?: Database["public"]["Enums"]["part_order_status"]
@@ -180,7 +180,7 @@ export type Database = {
           motorcycle_model?: string | null
           notes?: string | null
           part_code?: string | null
-          part_name?: string
+          part_name?: string | null
           quantity?: number
           selling_price?: number
           status?: Database["public"]["Enums"]["part_order_status"]
@@ -220,40 +220,40 @@ export type Database = {
       }
       work_orders: {
         Row: {
-          client_name: string
+          client_name: string | null
           client_phone: string | null
           created_at: string
           created_by: string | null
           id: string
           license_plate: string | null
-          motorcycle_make: string
-          motorcycle_model: string
+          motorcycle_make: string | null
+          motorcycle_model: string | null
           notes: string | null
           status: Database["public"]["Enums"]["work_order_status"]
           updated_at: string
         }
         Insert: {
-          client_name: string
+          client_name?: string | null
           client_phone?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
           license_plate?: string | null
-          motorcycle_make: string
-          motorcycle_model: string
+          motorcycle_make?: string | null
+          motorcycle_model?: string | null
           notes?: string | null
           status?: Database["public"]["Enums"]["work_order_status"]
           updated_at?: string
         }
         Update: {
-          client_name?: string
+          client_name?: string | null
           client_phone?: string | null
           created_at?: string
           created_by?: string | null
           id?: string
           license_plate?: string | null
-          motorcycle_make?: string
-          motorcycle_model?: string
+          motorcycle_make?: string | null
+          motorcycle_model?: string | null
           notes?: string | null
           status?: Database["public"]["Enums"]["work_order_status"]
           updated_at?: string

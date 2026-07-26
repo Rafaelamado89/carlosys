@@ -32,7 +32,7 @@ function PartsList() {
     if (status !== "all" && p.status !== status) return false;
     if (!q) return true;
     const s = q.toLowerCase();
-    return p.part_name.toLowerCase().includes(s) ||
+    return (p.part_name ?? "").toLowerCase().includes(s) ||
       (p.part_code ?? "").toLowerCase().includes(s) ||
       (p.motorcycle_model ?? "").toLowerCase().includes(s);
   });
@@ -73,7 +73,7 @@ function PartsList() {
                 <div key={p.id} className="p-4 flex items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <Link to="/parts/$id" params={{ id: p.id }} className="font-medium hover:underline block truncate">
-                      {p.part_name}
+                      {p.part_name || "Peça sem nome"}
                     </Link>
                     <div className="text-xs text-muted-foreground truncate">
                       {p.part_code && <span className="font-mono">{p.part_code}</span>}

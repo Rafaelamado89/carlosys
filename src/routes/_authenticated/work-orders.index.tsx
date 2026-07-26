@@ -36,9 +36,9 @@ function WorkOrdersList() {
     if (!q) return true;
     const s = q.toLowerCase();
     return (
-      o.client_name.toLowerCase().includes(s) ||
-      o.motorcycle_make.toLowerCase().includes(s) ||
-      o.motorcycle_model.toLowerCase().includes(s) ||
+      (o.client_name ?? "").toLowerCase().includes(s) ||
+      (o.motorcycle_make ?? "").toLowerCase().includes(s) ||
+      (o.motorcycle_model ?? "").toLowerCase().includes(s) ||
       (o.license_plate ?? "").toLowerCase().includes(s)
     );
   });
@@ -99,13 +99,13 @@ function WorkOrdersList() {
                 className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,2fr)_minmax(0,2fr)_auto_auto] items-center gap-4 p-4 hover:bg-muted/50"
               >
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{o.client_name}</div>
+                  <div className="font-medium truncate">{o.client_name || "Sem cliente"}</div>
                   {o.client_phone && (
                     <div className="text-xs text-muted-foreground">{o.client_phone}</div>
                   )}
                 </div>
                 <div className="hidden sm:block min-w-0">
-                  <div className="text-sm truncate">{o.motorcycle_make} {o.motorcycle_model}</div>
+                  <div className="text-sm truncate">{[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Sem mota"}</div>
                   {o.license_plate && (
                     <div className="font-mono text-xs text-muted-foreground">{o.license_plate}</div>
                   )}

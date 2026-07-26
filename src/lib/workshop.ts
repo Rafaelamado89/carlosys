@@ -2,10 +2,10 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type WorkOrder = {
   id: string;
-  client_name: string;
+  client_name: string | null;
   client_phone: string | null;
-  motorcycle_make: string;
-  motorcycle_model: string;
+  motorcycle_make: string | null;
+  motorcycle_model: string | null;
   license_plate: string | null;
   status: "open" | "in_progress" | "waiting_parts" | "completed" | "cancelled";
   notes: string | null;
@@ -16,7 +16,7 @@ export type WorkOrder = {
 export type PartRequest = {
   id: string;
   work_order_id: string | null;
-  part_name: string;
+  part_name: string | null;
   part_code: string | null;
   motorcycle_model: string | null;
   external_url: string | null;
@@ -32,7 +32,7 @@ export type Invoice = {
   id: string;
   invoice_number: string;
   work_order_id: string | null;
-  client_name: string;
+  client_name: string | null;
   client_address: string | null;
   client_tax_id: string | null;
   client_phone: string | null;
@@ -54,7 +54,7 @@ export type InvoiceItem = {
   id: string;
   invoice_id: string;
   item_type: "labor" | "part";
-  description: string;
+  description: string | null;
   quantity: number;
   unit_price: number;
   discount: number;

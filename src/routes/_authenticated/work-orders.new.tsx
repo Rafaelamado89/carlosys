@@ -47,10 +47,10 @@ function NewWorkOrder() {
 
       <form onSubmit={submit} className="bg-card border rounded-xl p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Nome do cliente" required value={form.client_name} onChange={(v) => setForm({ ...form, client_name: v })} />
+          <Field label="Nome do cliente" value={form.client_name} onChange={(v) => setForm({ ...form, client_name: v })} />
           <Field label="Telefone" value={form.client_phone} onChange={(v) => setForm({ ...form, client_phone: v })} />
-          <Field label="Marca da mota" required value={form.motorcycle_make} onChange={(v) => setForm({ ...form, motorcycle_make: v })} />
-          <Field label="Modelo da mota" required value={form.motorcycle_model} onChange={(v) => setForm({ ...form, motorcycle_model: v })} />
+          <Field label="Marca da mota" value={form.motorcycle_make} onChange={(v) => setForm({ ...form, motorcycle_make: v })} />
+          <Field label="Modelo da mota" value={form.motorcycle_model} onChange={(v) => setForm({ ...form, motorcycle_model: v })} />
           <Field label="Matrícula" value={form.license_plate} onChange={(v) => setForm({ ...form, license_plate: formatLicensePlate(v) })} />
           <div>
             <label className="text-sm font-medium mb-1.5 block">Estado</label>
@@ -83,14 +83,13 @@ function NewWorkOrder() {
   );
 }
 
-function Field({ label, value, onChange, required }: { label: string; value: string; onChange: (v: string) => void; required?: boolean }) {
+function Field({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
     <div>
       <label className="text-sm font-medium mb-1.5 block">
-        {label}{required && <span className="text-destructive"> *</span>}
+        {label}
       </label>
       <input
-        required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full px-3 py-2 rounded-md border bg-background"
