@@ -98,7 +98,7 @@ function WorkOrderDetail() {
         moto_model: form.motorcycle_model || null,
         moto_plate: form.license_plate || null,
         obs: null,
-        motorcycle_info: `${form.motorcycle_make} ${form.motorcycle_model}${form.license_plate ? ` · ${form.license_plate}` : ""}`,
+        motorcycle_info: [form.motorcycle_make, form.motorcycle_model, form.license_plate].filter(Boolean).join(" · ") || null,
         created_by: user.user?.id,
       })
       .select()
@@ -117,7 +117,7 @@ function WorkOrderDetail() {
       const itemsToInsert = partsList.map((p, idx) => ({
         invoice_id: data.id,
         item_type: "part" as const,
-        description: p.part_name,
+        description: p.part_name ?? "",
         quantity: p.quantity || 1,
         unit_price: Number(p.selling_price) || 0,
         discount: 0,
@@ -141,13 +141,13 @@ function WorkOrderDetail() {
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div className="min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-3xl font-bold tracking-tight truncate">{form.client_name}</h1>
+            <h1 className="text-3xl font-bold tracking-tight truncate">{form.client_name || "Sem cliente"}</h1>
             <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-medium ${WO_STATUS_CLASS[form.status]}`}>
               {WO_STATUS_LABEL[form.status]}
             </span>
           </div>
           <p className="text-muted-foreground">
-            {form.motorcycle_make} {form.motorcycle_model}
+            {[form.motorcycle_make, form.motorcycle_model].filter(Boolean).join(" ") || "Sem mota"}
             {form.license_plate && <span className="ml-2 font-mono text-sm">· {form.license_plate}</span>}
           </p>
         </div>
@@ -166,10 +166,10 @@ function WorkOrderDetail() {
           <div className="bg-card border rounded-xl p-6">
             <h2 className="font-semibold mb-4">Dados da Folha de Obra</h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              <F label="Nome do cliente"><input value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Nome do cliente"><input value={form.client_name ?? ""} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
               <F label="Telefone"><input value={form.client_phone ?? ""} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Marca"><input value={form.motorcycle_make} onChange={(e) => setForm({ ...form, motorcycle_make: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-              <F label="Modelo"><input value={form.motorcycle_model} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Marca"><input value={form.motorcycle_make ?? ""} onChange={(e) => setForm({ ...form, motorcycle_make: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+              <F label="Modelo"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
               <F label="Matrícula"><input value={form.license_plate ?? ""} onChange={(e) => setForm({ ...form, license_plate: formatLicensePlate(e.target.value) })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
               <F label="Estado">
                 <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as WorkOrder["status"] })} className="w-full px-3 py-2 rounded-md border bg-background">
@@ -207,7 +207,7 @@ function WorkOrderDetail() {
                   <div key={p.id} className="p-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <Link to="/parts/$id" params={{ id: p.id }} className="font-medium hover:underline block truncate">
-                        {p.part_name}
+                        {p.part_name || "Peça sem nome"}
                       </Link>
                       <div className="text-xs text-muted-foreground">
                         {p.part_code && <span className="font-mono">{p.part_code} · </span>}

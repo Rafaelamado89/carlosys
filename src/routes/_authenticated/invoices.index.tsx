@@ -34,7 +34,7 @@ function InvoicesList() {
     if (!q) return true;
     const s = q.toLowerCase();
     return inv.invoice_number.toLowerCase().includes(s) ||
-      inv.client_name.toLowerCase().includes(s) ||
+      (inv.client_name ?? "").toLowerCase().includes(s) ||
       (inv.motorcycle_info ?? "").toLowerCase().includes(s);
   });
 
@@ -73,7 +73,7 @@ function InvoicesList() {
                 <Link key={inv.id} to="/invoices/$id" params={{ id: inv.id }} className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-4 p-4 hover:bg-muted/50">
                   <div className="font-mono text-sm text-primary font-semibold">{inv.invoice_number}</div>
                   <div className="min-w-0">
-                    <div className="font-medium truncate">{inv.client_name}</div>
+                    <div className="font-medium truncate">{inv.client_name || "Sem cliente"}</div>
                     {inv.motorcycle_info && <div className="text-xs text-muted-foreground truncate">{inv.motorcycle_info}</div>}
                   </div>
                   <div className="hidden sm:block text-xs text-muted-foreground">

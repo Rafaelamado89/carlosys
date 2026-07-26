@@ -81,7 +81,7 @@ function PartDetail() {
       </Link>
 
       <div className="flex items-start justify-between mb-6 gap-3">
-        <h1 className="text-3xl font-bold tracking-tight">{form.part_name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{form.part_name || "Peça sem nome"}</h1>
         <div className="flex gap-2 shrink-0">
           {form.external_url && (
             <a href={form.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
@@ -96,7 +96,7 @@ function PartDetail() {
 
       <div className="bg-card border rounded-xl p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
-          <F label="Part name"><input value={form.part_name} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Part name"><input value={form.part_name ?? ""} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
           <F label="Part code"><input value={form.part_code ?? ""} onChange={(e) => setForm({ ...form, part_code: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
           <F label="Motorcycle model"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
           <F label="Quantity"><input type="number" min={1} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
@@ -111,7 +111,7 @@ function PartDetail() {
             <select value={form.work_order_id ?? ""} onChange={(e) => setForm({ ...form, work_order_id: e.target.value || null })} className="w-full px-3 py-2 rounded-md border bg-background">
               <option value="">— None —</option>
               {orders.map((o) => (
-                <option key={o.id} value={o.id}>{o.client_name} — {o.motorcycle_make} {o.motorcycle_model}</option>
+                <option key={o.id} value={o.id}>{o.client_name || "Sem cliente"} — {[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Mota"}</option>
               ))}
             </select>
           </F>
