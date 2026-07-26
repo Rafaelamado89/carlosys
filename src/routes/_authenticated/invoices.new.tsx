@@ -106,7 +106,7 @@ function NewInvoice() {
         const itemsToInsert = partsList.map((p, idx) => ({
           invoice_id: data.id,
           item_type: "part" as const,
-          description: p.part_name,
+          description: p.part_name ?? "",
           quantity: p.quantity || 1,
           unit_price: Number(p.selling_price) || 0,
           discount: 0,
@@ -148,7 +148,7 @@ function NewInvoice() {
               const plateInfo = wo.license_plate ? ` (${wo.license_plate})` : "";
               return (
                 <option key={wo.id} value={wo.id}>
-                  🏍️ {motoInfo || "Mota"} {plateInfo} — Cliente: {wo.client_name}
+                  🏍️ {motoInfo || "Mota"} {plateInfo} — Cliente: {wo.client_name || "Sem cliente"}
                 </option>
               );
             })}
@@ -161,7 +161,7 @@ function NewInvoice() {
         <div>
           <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-semibold">Cliente</div>
           <div className="grid sm:grid-cols-2 gap-4">
-            <F label="Nome" required><input required value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+            <F label="Nome"><input value={form.client_name} onChange={(e) => setForm({ ...form, client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="NIF"><input value={form.client_tax_id} onChange={(e) => setForm({ ...form, client_tax_id: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Telefone"><input value={form.client_phone} onChange={(e) => setForm({ ...form, client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Email"><input type="email" value={form.client_email} onChange={(e) => setForm({ ...form, client_email: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
@@ -199,6 +199,6 @@ function NewInvoice() {
   );
 }
 
-function F({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
-  return <div><label className="text-sm font-medium mb-1.5 block">{label}{required && <span className="text-destructive"> *</span>}</label>{children}</div>;
+function F({ label, children }: { label: string; children: React.ReactNode }) {
+  return <div><label className="text-sm font-medium mb-1.5 block">{label}</label>{children}</div>;
 }

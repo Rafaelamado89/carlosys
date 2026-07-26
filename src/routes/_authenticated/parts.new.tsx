@@ -100,11 +100,10 @@ function NewPart() {
       <h1 className="text-3xl font-bold tracking-tight mb-6">Nova peça</h1>
 
       <form onSubmit={submit} className="bg-card border rounded-xl p-6 space-y-5">
-        <F label="Nome da peça" required>
+        <F label="Nome da peça">
           <div className="relative">
             <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
-              required
               autoFocus
               placeholder="Ex.: filtro de óleo, kit transmissão…"
               value={form.part_name}
@@ -159,7 +158,7 @@ function NewPart() {
             <select value={form.work_order_id} onChange={(e) => setForm({ ...form, work_order_id: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background">
               <option value="">— Nenhuma —</option>
               {orders.map((o) => (
-                <option key={o.id} value={o.id}>{o.client_name} — {o.motorcycle_make} {o.motorcycle_model}</option>
+                <option key={o.id} value={o.id}>{o.client_name || "Sem cliente"} — {[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Mota"}</option>
               ))}
             </select>
           </F>
@@ -179,11 +178,11 @@ function NewPart() {
   );
 }
 
-function F({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+function F({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
       <label className="text-sm font-medium mb-1.5 block">
-        {label}{required && <span className="text-destructive"> *</span>}
+        {label}
       </label>
       {children}
     </div>

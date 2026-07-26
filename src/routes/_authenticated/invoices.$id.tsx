@@ -96,7 +96,7 @@ function InvoiceDetail() {
       id: `new-${Date.now()}-${Math.random()}`,
       invoice_id: id,
       item_type: "part" as const,
-      description: p.part_name,
+      description: p.part_name ?? "",
       quantity: p.quantity || 1,
       unit_price: Number(p.selling_price) || 0,
       discount: 0,
@@ -202,7 +202,7 @@ function InvoiceDetail() {
         <div className="bg-card border rounded-xl p-6 mb-6 grid md:grid-cols-2 gap-6">
           <div className="space-y-3">
             <div className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">Cliente</div>
-            <F label="Nome"><input value={invoice.client_name} onChange={(e) => setInv({ client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+            <F label="Nome"><input value={invoice.client_name ?? ""} onChange={(e) => setInv({ client_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="NIF"><input value={invoice.client_tax_id ?? ""} onChange={(e) => setInv({ client_tax_id: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Telefone"><input value={invoice.client_phone ?? ""} onChange={(e) => setInv({ client_phone: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
             <F label="Email"><input value={invoice.client_email ?? ""} onChange={(e) => setInv({ client_email: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
