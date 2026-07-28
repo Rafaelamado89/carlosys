@@ -21,6 +21,7 @@ function InvoiceDetail() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const [showPreview, setShowPreview] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const { data } = useQuery({
     queryKey: ["invoice", id],
