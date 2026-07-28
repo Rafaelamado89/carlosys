@@ -233,9 +233,13 @@ function InvoiceDetail() {
             <button onClick={() => setShowPreview((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted">
               <Eye className="h-4 w-4" /> {showPreview ? "Ocultar" : "Pré-visualizar"}
             </button>
+            <button onClick={downloadPdf} disabled={downloading} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted disabled:opacity-50">
+              <Download className="h-4 w-4" /> {downloading ? "A gerar…" : "Descarregar PDF"}
+            </button>
             <button onClick={doPrint} className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
               <Printer className="h-4 w-4" /> Imprimir
             </button>
+
             <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10">
               <Trash2 className="h-4 w-4" />
             </button>
