@@ -127,37 +127,47 @@ function PartDetail() {
 
       <div className="bg-card border rounded-xl p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
-          <F label="Part name"><input value={form.part_name ?? ""} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Part code"><input value={form.part_code ?? ""} onChange={(e) => setForm({ ...form, part_code: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
-          <F label="Motorcycle model"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Quantity"><input type="number" min={1} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Cost price (€)"><input type="number" step="0.01" value={form.cost_price} onChange={(e) => setForm({ ...form, cost_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Selling price (€)"><input type="number" step="0.01" value={form.selling_price} onChange={(e) => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Status">
+          <F label="Nome da peça"><input value={form.part_name ?? ""} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Referência"><input value={form.part_code ?? ""} onChange={(e) => setForm({ ...form, part_code: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+          <F label="Modelo da mota"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Quantidade"><input type="number" min={1} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Preço de custo (€)"><input type="number" step="0.01" value={form.cost_price} onChange={(e) => setForm({ ...form, cost_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Preço de venda (€)"><input type="number" step="0.01" value={form.selling_price} onChange={(e) => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Estado">
             <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as PartRequest["status"] })} className="w-full px-3 py-2 rounded-md border bg-background">
               {Object.entries(PART_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </F>
-          <F label="Linked work order">
+          <F label="Registo associado">
             <select value={form.work_order_id ?? ""} onChange={(e) => setForm({ ...form, work_order_id: e.target.value || null })} className="w-full px-3 py-2 rounded-md border bg-background">
-              <option value="">— None —</option>
+              <option value="">— Nenhum —</option>
               {orders.map((o) => (
                 <option key={o.id} value={o.id}>{o.client_name || "Sem cliente"} — {[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Mota"}</option>
               ))}
             </select>
           </F>
         </div>
-        <F label="External URL"><input type="url" value={form.external_url ?? ""} onChange={(e) => setForm({ ...form, external_url: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-        <F label="Notes"><textarea rows={3} value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+        <F label="Link do fornecedor">
+          <div className="flex gap-2">
+            <input type="url" value={form.external_url ?? ""} onChange={(e) => setForm({ ...form, external_url: e.target.value })} className="flex-1 px-3 py-2 rounded-md border bg-background" />
+            <button type="button" onClick={() => loadPreview(form.external_url)} disabled={loadingPreview} className="inline-flex items-center gap-2 px-3 py-2 rounded-md border font-medium hover:bg-muted disabled:opacity-50 shrink-0">
+              <RefreshCw className={`h-4 w-4 ${loadingPreview ? "animate-spin" : ""}`} /> Buscar imagem
+            </button>
+          </div>
+        </F>
+        <F label="Imagem da peça (URL)"><input type="url" value={form.image_url ?? ""} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+        <F label="Notas"><textarea rows={3} value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
 
         <div className="flex items-center justify-between pt-2 border-t">
           <div className="text-sm">
-            <span className="text-muted-foreground">Margin: </span>
+            <span className="text-muted-foreground">Lucro: </span>
             <span className={`font-mono font-semibold ${margin >= 0 ? "text-success" : "text-destructive"}`}>{money(margin)}</span>
           </div>
           <button onClick={save} className="px-5 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-            Save changes
+            Guardar alterações
           </button>
+        </div>
+
         </div>
       </div>
     </div>
