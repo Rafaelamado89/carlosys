@@ -101,7 +101,7 @@ function PartDetail() {
   return (
     <div className="p-4 lg:p-8 max-w-3xl mx-auto">
       <Link to="/parts" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4">
-        <ArrowLeft className="h-4 w-4" /> All parts
+        <ArrowLeft className="h-4 w-4" /> Todas as peças
       </Link>
 
       <div className="flex items-start justify-between mb-6 gap-3">
@@ -109,12 +109,13 @@ function PartDetail() {
         <div className="flex gap-2 shrink-0">
           {form.external_url && (
             <a href={form.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-              <ExternalLink className="h-4 w-4" /> Open supplier
+              <ExternalLink className="h-4 w-4" /> Abrir fornecedor
             </a>
           )}
           <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10">
             <Trash2 className="h-4 w-4" />
           </button>
+        </div>
       </div>
 
       {form.external_url && (
@@ -123,8 +124,6 @@ function PartDetail() {
         </div>
       )}
 
-
-      </div>
 
       <div className="bg-card border rounded-xl p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
