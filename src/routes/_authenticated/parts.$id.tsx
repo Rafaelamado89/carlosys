@@ -2,9 +2,12 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PART_STATUS_LABEL, money, type PartRequest, type WorkOrder } from "@/lib/workshop";
-import { ArrowLeft, ExternalLink, Trash2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Trash2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { fetchLinkPreview } from "@/lib/link-preview.functions";
+import { LinkPreviewCard } from "@/components/LinkPreviewCard";
 
 export const Route = createFileRoute("/_authenticated/parts/$id")({
   head: () => ({ meta: [{ title: "Part · Workshop ERP" }] }),
