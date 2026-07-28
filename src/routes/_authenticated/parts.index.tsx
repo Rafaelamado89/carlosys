@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PART_STATUS_CLASS, PART_STATUS_LABEL, money, type PartRequest } from "@/lib/workshop";
 import { ExternalLink, Plus, Search } from "lucide-react";
+import { LinkThumb } from "@/components/LinkPreviewCard";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_authenticated/parts/")({
@@ -71,6 +72,11 @@ function PartsList() {
               const margin = (Number(p.selling_price) - Number(p.cost_price)) * Number(p.quantity);
               return (
                 <div key={p.id} className="p-4 flex items-center gap-4">
+                  {p.external_url ? (
+                    <LinkThumb url={p.external_url} imageUrl={p.image_url} />
+                  ) : (
+                    <div className="h-12 w-12 shrink-0 rounded-lg border bg-muted" />
+                  )}
                   <div className="flex-1 min-w-0">
                     <Link to="/parts/$id" params={{ id: p.id }} className="font-medium hover:underline block truncate">
                       {p.part_name || "Peça sem nome"}
