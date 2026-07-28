@@ -167,10 +167,9 @@ function PartDetail() {
             Guardar alterações
           </button>
         </div>
-
-        </div>
       </div>
     </div>
+
   );
 }
 
