@@ -43,8 +43,28 @@ function PartDetail() {
 
   const [form, setForm] = useState<PartRequest | null>(null);
   useEffect(() => { if (data) setForm(data); }, [data]);
+  const getPreview = useServerFn(fetchLinkPreview);
+  const [loadingPreview, setLoadingPreview] = useState(false);
 
-  if (!form) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  const loadPreview = async (url: string | null) => {
+    if (!url) return toast.error("Adiciona primeiro o link do fornecedor.");
+    setLoadingPreview(true);
+    try {
+      const res = await getPreview({ data: { url } });
+      if (res.image) {
+        setForm((f) => (f ? { ...f, image_url: res.image } : f));
+        toast.success("Imagem encontrada");
+      } else {
+        toast.info("Não foi possível obter imagem deste link.");
+      }
+    } catch {
+      toast.error("Não foi possível ler o link.");
+    } finally {
+      setLoadingPreview(false);
+    }
+  };
+
+  if (!form) return <div className="p-8 text-muted-foreground">A carregar…</div>;
 
   const save = async () => {
     const { error } = await supabase
