@@ -2,9 +2,12 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PART_STATUS_LABEL, money, type PartRequest, type WorkOrder } from "@/lib/workshop";
-import { ArrowLeft, ExternalLink, Trash2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Trash2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { fetchLinkPreview } from "@/lib/link-preview.functions";
+import { LinkPreviewCard } from "@/components/LinkPreviewCard";
 
 export const Route = createFileRoute("/_authenticated/parts/$id")({
   head: () => ({ meta: [{ title: "Part · Workshop ERP" }] }),
@@ -40,8 +43,28 @@ function PartDetail() {
 
   const [form, setForm] = useState<PartRequest | null>(null);
   useEffect(() => { if (data) setForm(data); }, [data]);
+  const getPreview = useServerFn(fetchLinkPreview);
+  const [loadingPreview, setLoadingPreview] = useState(false);
 
-  if (!form) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  const loadPreview = async (url: string | null) => {
+    if (!url) return toast.error("Adiciona primeiro o link do fornecedor.");
+    setLoadingPreview(true);
+    try {
+      const res = await getPreview({ data: { url } });
+      if (res.image) {
+        setForm((f) => (f ? { ...f, image_url: res.image } : f));
+        toast.success("Imagem encontrada");
+      } else {
+        toast.info("Não foi possível obter imagem deste link.");
+      }
+    } catch {
+      toast.error("Não foi possível ler o link.");
+    } finally {
+      setLoadingPreview(false);
+    }
+  };
+
+  if (!form) return <div className="p-8 text-muted-foreground">A carregar…</div>;
 
   const save = async () => {
     const { error } = await supabase
@@ -52,6 +75,7 @@ function PartDetail() {
         part_code: form.part_code,
         motorcycle_model: form.motorcycle_model,
         external_url: form.external_url,
+        image_url: form.image_url,
         cost_price: form.cost_price,
         selling_price: form.selling_price,
         quantity: form.quantity,
@@ -77,7 +101,7 @@ function PartDetail() {
   return (
     <div className="p-4 lg:p-8 max-w-3xl mx-auto">
       <Link to="/parts" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4">
-        <ArrowLeft className="h-4 w-4" /> All parts
+        <ArrowLeft className="h-4 w-4" /> Todas as peças
       </Link>
 
       <div className="flex items-start justify-between mb-6 gap-3">
@@ -85,7 +109,7 @@ function PartDetail() {
         <div className="flex gap-2 shrink-0">
           {form.external_url && (
             <a href={form.external_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-              <ExternalLink className="h-4 w-4" /> Open supplier
+              <ExternalLink className="h-4 w-4" /> Abrir fornecedor
             </a>
           )}
           <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10">
@@ -94,42 +118,58 @@ function PartDetail() {
         </div>
       </div>
 
+      {form.external_url && (
+        <div className="mb-6">
+          <LinkPreviewCard url={form.external_url} imageUrl={form.image_url} title={form.part_name} />
+        </div>
+      )}
+
+
       <div className="bg-card border rounded-xl p-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-4">
-          <F label="Part name"><input value={form.part_name ?? ""} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Part code"><input value={form.part_code ?? ""} onChange={(e) => setForm({ ...form, part_code: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
-          <F label="Motorcycle model"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Quantity"><input type="number" min={1} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Cost price (€)"><input type="number" step="0.01" value={form.cost_price} onChange={(e) => setForm({ ...form, cost_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Selling price (€)"><input type="number" step="0.01" value={form.selling_price} onChange={(e) => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-          <F label="Status">
+          <F label="Nome da peça"><input value={form.part_name ?? ""} onChange={(e) => setForm({ ...form, part_name: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Referência"><input value={form.part_code ?? ""} onChange={(e) => setForm({ ...form, part_code: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background font-mono" /></F>
+          <F label="Modelo da mota"><input value={form.motorcycle_model ?? ""} onChange={(e) => setForm({ ...form, motorcycle_model: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Quantidade"><input type="number" min={1} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: parseInt(e.target.value) || 1 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Preço de custo (€)"><input type="number" step="0.01" value={form.cost_price} onChange={(e) => setForm({ ...form, cost_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Preço de venda (€)"><input type="number" step="0.01" value={form.selling_price} onChange={(e) => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+          <F label="Estado">
             <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as PartRequest["status"] })} className="w-full px-3 py-2 rounded-md border bg-background">
               {Object.entries(PART_STATUS_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </F>
-          <F label="Linked work order">
+          <F label="Registo associado">
             <select value={form.work_order_id ?? ""} onChange={(e) => setForm({ ...form, work_order_id: e.target.value || null })} className="w-full px-3 py-2 rounded-md border bg-background">
-              <option value="">— None —</option>
+              <option value="">— Nenhum —</option>
               {orders.map((o) => (
                 <option key={o.id} value={o.id}>{o.client_name || "Sem cliente"} — {[o.motorcycle_make, o.motorcycle_model].filter(Boolean).join(" ") || "Mota"}</option>
               ))}
             </select>
           </F>
         </div>
-        <F label="External URL"><input type="url" value={form.external_url ?? ""} onChange={(e) => setForm({ ...form, external_url: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
-        <F label="Notes"><textarea rows={3} value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+        <F label="Link do fornecedor">
+          <div className="flex gap-2">
+            <input type="url" value={form.external_url ?? ""} onChange={(e) => setForm({ ...form, external_url: e.target.value })} className="flex-1 px-3 py-2 rounded-md border bg-background" />
+            <button type="button" onClick={() => loadPreview(form.external_url)} disabled={loadingPreview} className="inline-flex items-center gap-2 px-3 py-2 rounded-md border font-medium hover:bg-muted disabled:opacity-50 shrink-0">
+              <RefreshCw className={`h-4 w-4 ${loadingPreview ? "animate-spin" : ""}`} /> Buscar imagem
+            </button>
+          </div>
+        </F>
+        <F label="Imagem da peça (URL)"><input type="url" value={form.image_url ?? ""} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
+        <F label="Notas"><textarea rows={3} value={form.notes ?? ""} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full px-3 py-2 rounded-md border bg-background" /></F>
 
         <div className="flex items-center justify-between pt-2 border-t">
           <div className="text-sm">
-            <span className="text-muted-foreground">Margin: </span>
+            <span className="text-muted-foreground">Lucro: </span>
             <span className={`font-mono font-semibold ${margin >= 0 ? "text-success" : "text-destructive"}`}>{money(margin)}</span>
           </div>
           <button onClick={save} className="px-5 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
-            Save changes
+            Guardar alterações
           </button>
         </div>
       </div>
     </div>
+
   );
 }
 

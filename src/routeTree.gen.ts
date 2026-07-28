@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedWorkOrdersIndexRouteImport } from './routes/_authenticated/work-orders.index'
 import { Route as AuthenticatedPartsIndexRouteImport } from './routes/_authenticated/parts.index'
+import { Route as AuthenticatedManualsIndexRouteImport } from './routes/_authenticated/manuals.index'
 import { Route as AuthenticatedInvoicesIndexRouteImport } from './routes/_authenticated/invoices.index'
 import { Route as AuthenticatedWorkOrdersNewRouteImport } from './routes/_authenticated/work-orders.new'
 import { Route as AuthenticatedWorkOrdersIdRouteImport } from './routes/_authenticated/work-orders.$id'
@@ -53,6 +54,12 @@ const AuthenticatedPartsIndexRoute = AuthenticatedPartsIndexRouteImport.update({
   path: '/parts/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedManualsIndexRoute =
+  AuthenticatedManualsIndexRouteImport.update({
+    id: '/manuals/',
+    path: '/manuals/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedInvoicesIndexRoute =
   AuthenticatedInvoicesIndexRouteImport.update({
     id: '/invoices/',
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
   '/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
   '/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/manuals/': typeof AuthenticatedManualsIndexRoute
   '/parts/': typeof AuthenticatedPartsIndexRoute
   '/work-orders/': typeof AuthenticatedWorkOrdersIndexRoute
 }
@@ -118,6 +126,7 @@ export interface FileRoutesByTo {
   '/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
   '/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
   '/invoices': typeof AuthenticatedInvoicesIndexRoute
+  '/manuals': typeof AuthenticatedManualsIndexRoute
   '/parts': typeof AuthenticatedPartsIndexRoute
   '/work-orders': typeof AuthenticatedWorkOrdersIndexRoute
 }
@@ -134,6 +143,7 @@ export interface FileRoutesById {
   '/_authenticated/work-orders/$id': typeof AuthenticatedWorkOrdersIdRoute
   '/_authenticated/work-orders/new': typeof AuthenticatedWorkOrdersNewRoute
   '/_authenticated/invoices/': typeof AuthenticatedInvoicesIndexRoute
+  '/_authenticated/manuals/': typeof AuthenticatedManualsIndexRoute
   '/_authenticated/parts/': typeof AuthenticatedPartsIndexRoute
   '/_authenticated/work-orders/': typeof AuthenticatedWorkOrdersIndexRoute
 }
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/work-orders/$id'
     | '/work-orders/new'
     | '/invoices/'
+    | '/manuals/'
     | '/parts/'
     | '/work-orders/'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/work-orders/$id'
     | '/work-orders/new'
     | '/invoices'
+    | '/manuals'
     | '/parts'
     | '/work-orders'
   id:
@@ -179,6 +191,7 @@ export interface FileRouteTypes {
     | '/_authenticated/work-orders/$id'
     | '/_authenticated/work-orders/new'
     | '/_authenticated/invoices/'
+    | '/_authenticated/manuals/'
     | '/_authenticated/parts/'
     | '/_authenticated/work-orders/'
   fileRoutesById: FileRoutesById
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       path: '/parts'
       fullPath: '/parts/'
       preLoaderRoute: typeof AuthenticatedPartsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/manuals/': {
+      id: '/_authenticated/manuals/'
+      path: '/manuals'
+      fullPath: '/manuals/'
+      preLoaderRoute: typeof AuthenticatedManualsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/invoices/': {
@@ -294,6 +314,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedWorkOrdersIdRoute: typeof AuthenticatedWorkOrdersIdRoute
   AuthenticatedWorkOrdersNewRoute: typeof AuthenticatedWorkOrdersNewRoute
   AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
+  AuthenticatedManualsIndexRoute: typeof AuthenticatedManualsIndexRoute
   AuthenticatedPartsIndexRoute: typeof AuthenticatedPartsIndexRoute
   AuthenticatedWorkOrdersIndexRoute: typeof AuthenticatedWorkOrdersIndexRoute
 }
@@ -307,6 +328,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedWorkOrdersIdRoute: AuthenticatedWorkOrdersIdRoute,
   AuthenticatedWorkOrdersNewRoute: AuthenticatedWorkOrdersNewRoute,
   AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
+  AuthenticatedManualsIndexRoute: AuthenticatedManualsIndexRoute,
   AuthenticatedPartsIndexRoute: AuthenticatedPartsIndexRoute,
   AuthenticatedWorkOrdersIndexRoute: AuthenticatedWorkOrdersIndexRoute,
 }

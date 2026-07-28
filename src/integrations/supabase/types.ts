@@ -138,6 +138,51 @@ export type Database = {
           },
         ]
       }
+      manuals: {
+        Row: {
+          brand: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          external_url: string | null
+          file_name: string | null
+          file_path: string | null
+          id: string
+          keywords: string | null
+          model: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          external_url?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          keywords?: string | null
+          model?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          external_url?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          keywords?: string | null
+          model?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       parts_requests: {
         Row: {
           cost_price: number
@@ -145,6 +190,7 @@ export type Database = {
           created_by: string | null
           external_url: string | null
           id: string
+          image_url: string | null
           motorcycle_model: string | null
           notes: string | null
           part_code: string | null
@@ -161,6 +207,7 @@ export type Database = {
           created_by?: string | null
           external_url?: string | null
           id?: string
+          image_url?: string | null
           motorcycle_model?: string | null
           notes?: string | null
           part_code?: string | null
@@ -177,6 +224,7 @@ export type Database = {
           created_by?: string | null
           external_url?: string | null
           id?: string
+          image_url?: string | null
           motorcycle_model?: string | null
           notes?: string | null
           part_code?: string | null

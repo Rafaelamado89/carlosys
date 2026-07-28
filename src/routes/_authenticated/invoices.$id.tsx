@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { money, formatLicensePlate, type Invoice, type InvoiceItem } from "@/lib/workshop";
-import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package } from "lucide-react";
+import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
@@ -21,6 +21,7 @@ function InvoiceDetail() {
   const nav = useNavigate();
   const qc = useQueryClient();
   const [showPreview, setShowPreview] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const { data } = useQuery({
     queryKey: ["invoice", id],
@@ -170,6 +171,49 @@ function InvoiceDetail() {
     setTimeout(() => window.print(), 100);
   };
 
+  const downloadPdf = async () => {
+    await save(true);
+    setShowPreview(true);
+    setDownloading(true);
+    toast.loading("A gerar PDF…", { id: "pdf" });
+    try {
+      await new Promise((r) => setTimeout(r, 400));
+      const el = document.querySelector(".print-area") as HTMLElement | null;
+      if (!el) throw new Error("Pré-visualização indisponível");
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const img = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 8;
+      const w = pageW - margin * 2;
+      const h = (canvas.height * w) / canvas.width;
+      if (h <= pageH - margin * 2) {
+        pdf.addImage(img, "JPEG", margin, margin, w, h);
+      } else {
+        let remaining = h;
+        let position = margin;
+        while (remaining > 0) {
+          pdf.addImage(img, "JPEG", margin, position, w, h);
+          remaining -= pageH - margin * 2;
+          position -= pageH - margin * 2;
+          if (remaining > 0) pdf.addPage();
+        }
+      }
+      pdf.save(`Orcamento-${invoice.invoice_number}.pdf`);
+      toast.success("PDF descarregado", { id: "pdf" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível gerar o PDF.", { id: "pdf" });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+
   return (
     <div className="p-4 lg:p-8 max-w-5xl mx-auto">
       <div className="no-print">
@@ -189,9 +233,13 @@ function InvoiceDetail() {
             <button onClick={() => setShowPreview((v) => !v)} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted">
               <Eye className="h-4 w-4" /> {showPreview ? "Ocultar" : "Pré-visualizar"}
             </button>
+            <button onClick={downloadPdf} disabled={downloading} className="inline-flex items-center gap-2 px-4 py-2 rounded-md border font-semibold hover:bg-muted disabled:opacity-50">
+              <Download className="h-4 w-4" /> {downloading ? "A gerar…" : "Descarregar PDF"}
+            </button>
             <button onClick={doPrint} className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-semibold hover:opacity-90">
               <Printer className="h-4 w-4" /> Imprimir
             </button>
+
             <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10">
               <Trash2 className="h-4 w-4" />
             </button>
