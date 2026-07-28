@@ -104,3 +104,16 @@ export function formatLicensePlate(value: string): string {
 
 // Suppress unused import warning for types file consumers
 export type _DbRef = Database;
+
+export type Manual = {
+  id: string;
+  title: string | null;
+  description: string | null;
+  brand: string | null;
+  model: string | null;
+  keywords: string | null;
+  external_url: string | null;
+  file_path: string | null;
+  file_name: string | null;
+  created_at: string;
+};
