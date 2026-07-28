@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { money, formatLicensePlate, type Invoice, type InvoiceItem } from "@/lib/workshop";
-import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package } from "lucide-react";
+import { ArrowLeft, Plus, Printer, Trash2, Save, Eye, Package, Download } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
