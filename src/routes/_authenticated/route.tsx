@@ -23,6 +23,7 @@ const NAV = [
   { to: "/work-orders", label: "Registos", icon: Wrench },
   { to: "/parts", label: "Peças", icon: Package },
   { to: "/invoices", label: "Orçamentos", icon: FileText },
+  { to: "/manuals", label: "Manuais", icon: BookOpen },
 ] as const;
 
 function Shell() {
