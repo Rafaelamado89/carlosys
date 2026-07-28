@@ -55,6 +55,7 @@ function PartDetail() {
         part_code: form.part_code,
         motorcycle_model: form.motorcycle_model,
         external_url: form.external_url,
+        image_url: form.image_url,
         cost_price: form.cost_price,
         selling_price: form.selling_price,
         quantity: form.quantity,
