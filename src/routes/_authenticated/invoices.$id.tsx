@@ -170,6 +170,49 @@ function InvoiceDetail() {
     setTimeout(() => window.print(), 100);
   };
 
+  const downloadPdf = async () => {
+    await save(true);
+    setShowPreview(true);
+    setDownloading(true);
+    toast.loading("A gerar PDF…", { id: "pdf" });
+    try {
+      await new Promise((r) => setTimeout(r, 400));
+      const el = document.querySelector(".print-area") as HTMLElement | null;
+      if (!el) throw new Error("Pré-visualização indisponível");
+      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const img = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const margin = 8;
+      const w = pageW - margin * 2;
+      const h = (canvas.height * w) / canvas.width;
+      if (h <= pageH - margin * 2) {
+        pdf.addImage(img, "JPEG", margin, margin, w, h);
+      } else {
+        let remaining = h;
+        let position = margin;
+        while (remaining > 0) {
+          pdf.addImage(img, "JPEG", margin, position, w, h);
+          remaining -= pageH - margin * 2;
+          position -= pageH - margin * 2;
+          if (remaining > 0) pdf.addPage();
+        }
+      }
+      pdf.save(`Orcamento-${invoice.invoice_number}.pdf`);
+      toast.success("PDF descarregado", { id: "pdf" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível gerar o PDF.", { id: "pdf" });
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+
   return (
     <div className="p-4 lg:p-8 max-w-5xl mx-auto">
       <div className="no-print">
