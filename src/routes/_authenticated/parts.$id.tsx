@@ -115,7 +115,15 @@ function PartDetail() {
           <button onClick={remove} className="p-2 rounded-md border text-destructive hover:bg-destructive/10">
             <Trash2 className="h-4 w-4" />
           </button>
+      </div>
+
+      {form.external_url && (
+        <div className="mb-6">
+          <LinkPreviewCard url={form.external_url} imageUrl={form.image_url} title={form.part_name} />
         </div>
+      )}
+
+
       </div>
 
       <div className="bg-card border rounded-xl p-6 space-y-5">
